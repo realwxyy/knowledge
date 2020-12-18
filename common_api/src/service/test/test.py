@@ -7,7 +7,7 @@ def test_return():
     data = User.query.all()
     user_schema = UserSchema(many=True, only=['id', 'name', 'age'])
     user = user_schema.dump(data)
-    return resp.resp_not_found(user)
+    return resp.resp_succ(user)
 
 
 def get_token(params):
