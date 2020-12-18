@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.datastructures import ImmutableMultiDict, CombinedMultiDict
 from src.config.config import DevelopmentConfig
 from src.controller import resgister_test
-from src.utils.database import db
+from src.utils import db, response_with, resp
 import logging
 import time
 
@@ -45,5 +45,20 @@ def after_request(response, *args, **kwargs):
     diff_time = now_time - start_time
     logger.info('请求结束--------请求结束时间:【' + end_time + '】,请求耗时【' + str(round(diff_time, 3)) + 's】')
     return response
+
+@app.errorhandler(400)
+def bad_request(e):
+    logging.error(e)
+    return resp.resp_fail()
+
+@app.errorhandler(500)
+def server_error(e):
+    logging.error(e)
+    return resp.resp_err()
+
+@app.errorhandler(404)
+def not_found(e):
+    logging.error(e)
+    return resp.resp_not_found()
 
 db.init_app(app)

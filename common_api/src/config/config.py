@@ -12,6 +12,7 @@ class ProductionConfig(Config):
 
 
 class DevelopmentConfig(Config):
+    SECRET_KEY = 'wxyy'
     username = 'root'
     password = 123456
     database = 'common_api'
