@@ -1,69 +1,50 @@
-from flask import Blueprint, make_response, jsonify, request
-from src.model import User, UserSchema
-from src.utils import db, login_required
+from flask import Blueprint, request
+from src.utils import resp, login_required
 from src.service import user_service, token_service
+from werkzeug.security import generate_password_hash, check_password_hash
 
-uc = Blueprint('user', __name__, url_prefix='/user')
+gl_user = Blueprint('user', __name__, url_prefix='/user')
 
 
-@uc.route('/t1', methods=['get'])
+@gl_user.route('/t1', methods=['get'])
 def t1():
     return 'welocome to /test/t1'
 
 
-@uc.route('/t2', methods=['post'])
+@gl_user.route('/t2', methods=['post'])
 def t2():
     return 'welcome to /test/t2'
 
 # 模拟请求接口成功的参数
 
 
-@uc.route('/t3', methods=['get'])
+@gl_user.route('/t3', methods=['get'])
 def t3():
     # return {'code': 200, 'msg': '成功', 'data': []}
-    return make_response(jsonify({'code': 200, 'msg': '成功', 'data': []}))
+    return resp.resp_succ()
 
 # 新增测试参数
 
 
-@uc.route('/add_user', methods=['post'])
-def add_user():
-    data = {'name': 'wxyy', 'age': 18}
-    user_schema = UserSchema()
-    user = user_schema.load(data, session=db.session)
-    result = user_schema.dump(user.save())
-#   logger.info(str(result))
-    return {'code': 200, 'data': result}
+@gl_user.route('/save_user', methods=['post', 'put'])
+def save_user():
+    params = request.values.to_dict()
+    try:
+        params['password']
+    except Exception:
+        return resp.resp_fail('the password can not be empty')
+    params.update({'password': generate_password_hash(params['password'])})
+    user_service.save_user(params)
+    return resp.resp_succ()
 
 
-@uc.route('/get_user', methods=['get'])
-def get_user():
-    data = User.query.all()
-    user_schema = UserSchema(many=True, only=['id', 'name', 'age'])
-    user = user_schema.dump(data)
-    return {'coe': 200, 'data': user}
+@gl_user.route('/get_users', methods=['get'])
+def get_users():
+    return resp.resp_succ(user_service.get_users())
 
 
-@uc.route('/test_return', methods=['get', 'post'])
+@gl_user.route('/test_return', methods=['get', 'post'])
 @login_required
 def test_return():
-    return user_service.test_return()
-
-
-@uc.route('/get_token', methods=['post'])
-def get_token():
-    return token_service.get_token(request.values)
-
-    # try:
-    #     user = User.query.filter_by(phone=phone).first()
-    # except Exception:
-    #     return jsonify(code=4004,msg="获取信息失败")
-
-    # if user is None or not user.check_password(password):
-    #     return jsonify(code=4103,msg="手机号或密码错误")
-
-    # # 获取用户id，传入生成token的方法，并接收返回的token
-    # token = create_token(user.id)
-
-    # # 把token返回给前端
-    # return jsonify(code=0,msg="成功",data=token)
+    user = user_service.test_return()
+    return resp.resp_succ(user)

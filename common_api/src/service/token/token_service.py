@@ -1,10 +1,10 @@
 # 导入依赖包
 from flask import request, jsonify, current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-# from src.service import user_service
 from src.utils import resp
 from src.model import User
 import functools
+import json
 
 
 def create_token(api_user):
@@ -42,42 +42,17 @@ def verify_token(token):
     return user
     # return user_service.get_user_by_id(data)
 
-# AOP can only be called after logging in
-
-
-def login_required(view_func):
-    @functools.wraps(view_func)
-    def verify_token(*args, **kwargs):
-        try:
-            # 在请求头上拿到token
-            token = request.headers["common-token"]
-        except Exception:
-            # 没接收的到token,给前端抛出错误
-            # 这里的code推荐写一个文件统一管理。这里为了看着直观就先写死了。
-            return jsonify(code=4103, msg='缺少参数token')
-
-        s = Serializer(current_app.config["SECRET_KEY"])
-        try:
-            s.loads(token)
-        except Exception:
-            return jsonify(code=4101, msg="登录已过期")
-
-        return view_func(*args, **kwargs)
-
-    return verify_token
-
 
 def get_token(params):
 
     name = params.get('name')
-    age = params.get('age')
     try:
         user = User.query.filter_by(name=name).first()
     except Exception:
-        return resp.resp_fail({}, '查询用户失败')
+        return {'status_code':1, 'code': 4004, 'msg': '获取用户信息失败'}
 
     # if user is None or not user.check_password(password):
     #     return jsonify(code=4103,msg="手机号或密码错误")
     # 获取用户id，传入生成token的方法，并接收返回的token
     token = create_token(user.id)
-    return resp.resp_succ(token)
+    return {'status_code':0, 'code': 200, 'msg': token}

@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.datastructures import ImmutableMultiDict, CombinedMultiDict
 from src.config.config import DevelopmentConfig
 from src.controller import resgister_all_bluePrint
-from src.utils import db, response_with, resp
+from src.utils import db, resp
 import logging
 import time
 
