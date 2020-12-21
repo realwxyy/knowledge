@@ -1,12 +1,10 @@
 # 导入依赖包
 from flask import request, jsonify, current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-# # from src.service import user_service
-# from src.model import User
 import functools
 
 # AOP can only be called after logging in
-
+# 登录拦截
 
 def login_required(view_func):
     @functools.wraps(view_func)
