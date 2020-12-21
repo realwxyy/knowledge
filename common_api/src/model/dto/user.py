@@ -9,13 +9,13 @@ class User(db.Model):
     # 定义字段
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(64))
-    age = db.Column(db.String(64))
+    password = db.Column(db.String(64))
 
     def get_schema(self):
         return {
             'id': self.id,
             'name': self.name,
-            'age': self.age,
+            'password': self.password,
         }
 
     def save(self):
@@ -31,4 +31,4 @@ class UserSchema(ModelSchema):
 
     id = fields.Number()
     name = fields.String()
-    age = fields.Number()
+    password = fields.String()

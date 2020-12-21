@@ -57,9 +57,9 @@ def response_with(response, value=None, message=None,
     result = {}
     if value is not None:
         result.update({'data': value})
-
-    if response.get('message', None) is not None:
-        result.update({'message': response['message']})
+    print(message)
+    if message is not None:
+        result.update({'message': message})
 
     result.update({'code': response['code']})
 
@@ -83,7 +83,8 @@ def resp_not_found(data={}):
     return response_with(SERVER_ERROR_404, data)
 
 
-def resp_fail(data={}, message='失败'):
+def resp_fail(message='失败', data={},):
+    print(message)
     return response_with(BAD_REQUEST_400, data, message)
 
 
