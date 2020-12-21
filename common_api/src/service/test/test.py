@@ -1,6 +1,6 @@
 from src.model import User, UserSchema
 from src.utils import db, resp
-from src.utils import create_token
+from src.service import token_service
 
 
 def test_return():
@@ -13,7 +13,6 @@ def test_return():
 def get_token(params):
 
     name = params.get('name')
-    age = params.get('age')
     try:
         user = User.query.filter_by(name=name).first()
     except Exception:
@@ -22,5 +21,5 @@ def get_token(params):
     # if user is None or not user.check_password(password):
     #     return jsonify(code=4103,msg="手机号或密码错误")
     # 获取用户id，传入生成token的方法，并接收返回的token
-    token = create_token(user.id)
+    token = token_service.create_token(user.id)
     return resp.resp_succ(token)

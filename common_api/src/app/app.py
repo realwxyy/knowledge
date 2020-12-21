@@ -2,7 +2,7 @@ from flask import Flask, jsonify, current_app, request
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.datastructures import ImmutableMultiDict, CombinedMultiDict
 from src.config.config import DevelopmentConfig
-from src.controller import resgister_test
+from src.controller import resgister_all_bluePrint
 from src.utils import db, response_with, resp
 import logging
 import time
@@ -14,7 +14,7 @@ logger = current_app.logger
 logger.setLevel(logging.INFO)
 app.config.from_object(DevelopmentConfig)
 
-resgister_test(app)
+resgister_all_bluePrint(app)
 
 # 可以使用 @app.before_request 切面编程的方式修饰方法
 # 也可以使用 app.before_request(method) 的方式挂载方法

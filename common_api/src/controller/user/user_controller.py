@@ -1,24 +1,24 @@
 from flask import Blueprint, make_response, jsonify, request
 from src.model import User, UserSchema
-from src.utils.database import db
+from src.utils import db, login_required
 from src.service import user_service, token_service
 
-t = Blueprint('test', __name__, url_prefix='/test')
+uc = Blueprint('user', __name__, url_prefix='/user')
 
 
-@t.route('/t1', methods=['get'])
+@uc.route('/t1', methods=['get'])
 def t1():
     return 'welocome to /test/t1'
 
 
-@t.route('/t2', methods=['post'])
+@uc.route('/t2', methods=['post'])
 def t2():
     return 'welcome to /test/t2'
 
 # 模拟请求接口成功的参数
 
 
-@t.route('/t3', methods=['get'])
+@uc.route('/t3', methods=['get'])
 def t3():
     # return {'code': 200, 'msg': '成功', 'data': []}
     return make_response(jsonify({'code': 200, 'msg': '成功', 'data': []}))
@@ -26,7 +26,7 @@ def t3():
 # 新增测试参数
 
 
-@t.route('/add_user', methods=['post'])
+@uc.route('/add_user', methods=['post'])
 def add_user():
     data = {'name': 'wxyy', 'age': 18}
     user_schema = UserSchema()
@@ -36,7 +36,7 @@ def add_user():
     return {'code': 200, 'data': result}
 
 
-@t.route('/get_user', methods=['get'])
+@uc.route('/get_user', methods=['get'])
 def get_user():
     data = User.query.all()
     user_schema = UserSchema(many=True, only=['id', 'name', 'age'])
@@ -44,12 +44,13 @@ def get_user():
     return {'coe': 200, 'data': user}
 
 
-@t.route('/test_return', methods=['get', 'post'])
+@uc.route('/test_return', methods=['get', 'post'])
+@login_required
 def test_return():
     return user_service.test_return()
 
 
-@t.route('/get_token', methods=['post'])
+@uc.route('/get_token', methods=['post'])
 def get_token():
     return token_service.get_token(request.values)
 
