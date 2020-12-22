@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from src.utils import resp, login_required
 from src.service import user_service, token_service
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
 gl_user = Blueprint('user', __name__, url_prefix='/user')
 
@@ -29,16 +29,25 @@ def t3():
 @gl_user.route('/save_user', methods=['post', 'put'])
 def save_user():
     params = request.values.to_dict()
+    user = user_service.get_user_by_name(params)
+    try:
+        params['id']
+    except Exception:
+        if user:
+            if user.name == params['name']:
+                return resp.resp_fail({}, 'the name can not be repeat')
     try:
         params['password']
     except Exception:
-        return resp.resp_fail('the password can not be empty')
-    params.update({'password': generate_password_hash(params['password'])})
+        return resp.resp_fail({}, 'the password can not be empty')
+    # 憨批代码 不准删 以后多看看自己犯的错误
+    # params.update({'password': generate_password_hash(params['password'])})
     user_service.save_user(params)
     return resp.resp_succ()
 
 
 @gl_user.route('/get_users', methods=['get'])
+@login_required
 def get_users():
     return resp.resp_succ(user_service.get_users())
 
