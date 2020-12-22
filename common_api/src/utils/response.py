@@ -83,8 +83,7 @@ def resp_not_found(data={}):
     return response_with(SERVER_ERROR_404, data)
 
 
-def resp_fail(message='失败', data={},):
-    print(message)
+def resp_fail(data={}, message='失败'):
     return response_with(BAD_REQUEST_400, data, message)
 
 

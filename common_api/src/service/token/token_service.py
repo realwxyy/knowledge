@@ -1,10 +1,7 @@
 # 导入依赖包
-from flask import request, jsonify, current_app
+from flask import jsonify, current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from src.utils import resp
-from src.model import User
-import functools
-import json
+from src.model import User, UserSchema
 
 
 def create_token(api_user):
@@ -28,7 +25,6 @@ def verify_token(token):
     :param token: 
     :return: 用户信息 or None
     '''
-    print('进入verify_token方法')
     # 参数为私有秘钥，跟上面方法的秘钥保持一致
     s = Serializer(current_app.config["SECRET_KEY"])
     try:
@@ -46,13 +42,19 @@ def verify_token(token):
 def get_token(params):
 
     name = params.get('name')
+    password = params.get('password')
+    param_user = User()
+    param_user.password = password
     try:
         user = User.query.filter_by(name=name).first()
+        if not user.verify_password(password):
+            print('密码验证失败')
+            return {'status_code': 1, 'code': 4001, 'msg': '密码错误'}
     except Exception:
-        return {'status_code':1, 'code': 4004, 'msg': '获取用户信息失败'}
+        return {'status_code': 1, 'code': 4004, 'msg': '获取用户信息失败'}
 
     # if user is None or not user.check_password(password):
     #     return jsonify(code=4103,msg="手机号或密码错误")
     # 获取用户id，传入生成token的方法，并接收返回的token
     token = create_token(user.id)
-    return {'status_code':0, 'code': 200, 'msg': token}
+    return {'status_code': 0, 'code': 200, 'msg': token}
