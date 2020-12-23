@@ -14,7 +14,7 @@ def save_user(data):
 
 def get_users():
     data = User.query.all()
-    user_schema = UserSchema(many=True, only=['id', 'name', 'age'])
+    user_schema = UserSchema(many=True, only=['id', 'name'])
     users = user_schema.dump(data)
     return users
 
