@@ -51,6 +51,21 @@ SUCCESS_204 = {
     'code': 204
 }
 
+SUCCESS_0 = {
+    'http_code': 200,
+    'code': 0,
+}
+
+BAD_REQUEST_1 = {
+    'http_code': 400,
+    'code': 1,
+}
+
+UNAUTHORIZED__NEGATIVE_1 = {
+    "http_code": 403,
+    "code": -1,
+}
+
 
 def response_with(response, value=None, message=None,
                   error=None, headers={}, pagination=None):
@@ -71,12 +86,12 @@ def response_with(response, value=None, message=None,
 
     headers.update({'Access-Control-Allow-Origin': '*'})
     headers.update({'server': 'Flask REST API'})
-
+    print(result)
     return make_response(jsonify(result), response['http_code'], headers)
 
 
 def resp_succ(data={}):
-    return response_with(SUCCESS_200, data)
+    return response_with(SUCCESS_0, data)
 
 
 def resp_not_found(data={}):
@@ -84,7 +99,10 @@ def resp_not_found(data={}):
 
 
 def resp_fail(data={}, message='失败'):
-    return response_with(BAD_REQUEST_400, data, message)
+    return response_with(BAD_REQUEST_1, data, message)
+
+def resp_unauthorized(data={}, message='用户认证失败'):
+    return response_with(UNAUTHORIZED__NEGATIVE_1, data, message)
 
 
 def resp_err(data={}, message='失败'):
