@@ -4,7 +4,7 @@ from . import response as resp
 import functools
 
 
-def weichat_login_required(view_func):
+def wechat_login_required(view_func):
     '''
     AOP can only be called after logging in
     微信小程序登录态拦截
@@ -35,8 +35,9 @@ def weichat_login_required(view_func):
 def gen_3rdsession(params):
     # 用 openId 和 session_key 加密生成 3rd session
     # 过期时间为 60s * 60m * 24h * 30d
-    s = Serializer(current_app.config['SECRET_KEY'], 60 * 60 * 24 * 30)
-    third_session = s.dumps(params.to_dict())
+    # .decode("ascii")必加 一下午就解决这个 bug 了 不然是 byte 类型 jsonify 方法无法转换byte类型
+    s = Serializer(current_app.config['SECRET_KEY'], 60 * 60 * 24 * 31)
+    third_session = s.dumps(params).decode("ascii")
     return third_session
 
 
