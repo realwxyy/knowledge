@@ -48,7 +48,6 @@ def get_token(params):
     try:
         user = User.query.filter_by(name=name).first()
         if not user.verify_password(password):
-            print('密码验证失败')
             return {'status_code': 1, 'code': 4001, 'msg': '密码错误'}
     except Exception:
         return {'status_code': 1, 'code': 4004, 'msg': '获取用户信息失败'}
