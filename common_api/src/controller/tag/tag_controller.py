@@ -14,7 +14,8 @@ def save_role():
             return resp.resp_fail({}, '请勿重复添加标签：' + role_resp.get('name'))
         else:
             if params.get('create_date') is None:
-                params.update({'create_date': utils.if_empty_give_now_date()})
+                if not params.get('id'):
+                  params.update({'create_date': utils.if_empty_give_now_date()})
             if params.get('update_date') is None:
                 params.update({'update_date': utils.if_empty_give_now_date()})
             if params.get('is_delete') is None:

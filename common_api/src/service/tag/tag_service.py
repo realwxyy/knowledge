@@ -5,7 +5,9 @@ import json
 
 def query_tag_by_name(name):
     tag_schema = TagSchema()
-    tag = Tag.query.filter_by(name=name).first()
+    print('sql start--------------------------------------------------')
+    tag = Tag.query.filter(Tag.name == name).filter(Tag.is_delete >= 0).first()
+    print('sql end--------------------------------------------------')
     return tag_schema.dump(tag)
 
 
