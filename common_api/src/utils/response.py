@@ -88,8 +88,8 @@ def response_with(response, value=None, message=None,
     return make_response(jsonify(result), response['http_code'], headers)
 
 
-def resp_succ(data={}):
-    return response_with(SUCCESS_0, data)
+def resp_succ(data={}, message=None):
+    return response_with(SUCCESS_0, data, message)
 
 
 def resp_not_found(data={}):
