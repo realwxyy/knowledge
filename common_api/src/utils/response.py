@@ -87,7 +87,7 @@ def response_with(response, value=None, message=None,
     headers.update({'server': 'Flask REST API'})
     return make_response(jsonify(result), response['http_code'], headers)
 
-
+# 成功也要返回 message
 def resp_succ(data={}, message=None):
     return response_with(SUCCESS_0, data, message)
 
