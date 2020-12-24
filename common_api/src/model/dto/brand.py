@@ -51,6 +51,7 @@ class Brand(db.Model):
         db.session.commit()
         return self
 
+
 class BrandSchema(ModelSchema):
     class Meta:
         model = Brand

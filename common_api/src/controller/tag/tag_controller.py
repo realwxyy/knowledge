@@ -4,6 +4,7 @@ from src.service import tag_service
 
 gl_tag = Blueprint('tag', __name__, url_prefix='/tag')
 
+
 @gl_tag.route('save_tag', methods=['post', 'put'])
 def save_role():
     params = request.values.to_dict()
@@ -15,7 +16,7 @@ def save_role():
         else:
             if params.get('create_date') is None:
                 if not params.get('id'):
-                  params.update({'create_date': utils.if_empty_give_now_date()})
+                    params.update({'create_date': utils.if_empty_give_now_date()})
             if params.get('update_date') is None:
                 params.update({'update_date': utils.if_empty_give_now_date()})
             if params.get('is_delete') is None:
@@ -32,9 +33,9 @@ def query_tags():
 
 @gl_tag.route('delete_tag', methods=['delete'])
 def delete_tag():
-  params = request.values.to_dict()
-  service_resp = tag_service.delete_tag(params)
-  if service_resp.get('code') == 0:
-    return resp.resp_succ({}, service_resp.get('message'))
-  else:
-    return resp.resp_fail({}, service_resp.get('message'))
+    params = request.values.to_dict()
+    service_resp = tag_service.delete_tag(params)
+    if service_resp.get('code') == 0:
+        return resp.resp_succ({}, service_resp.get('message'))
+    else:
+        return resp.resp_fail({}, service_resp.get('message'))
