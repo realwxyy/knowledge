@@ -13,7 +13,7 @@ def product_post():
     @return please see message in 
     '''
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['brand_id', 'name', 'specification', 'main_img', 'standard_price', 'in_stock', 'promotional_red_line_price', 'box_gauge', 'gross_weight', 'box_gross_weight'])
+    validate_resp = utils.validate_dict_not_empty_with_key(params, ['brand_id', 'name', 'main_img', 'standard_price', 'in_stock', 'promotional_red_line_price', 'box_gauge', 'gross_weight', 'box_gross_weight'])
     if validate_resp.get('code') == 0:
         if params.get('create_date') is None:
             params.update({'create_date': utils.if_empty_give_now_date()})
@@ -34,7 +34,7 @@ def product_put():
     @return please see return instance
     '''
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['id', 'brand_id', 'name', 'specification', 'main_img', 'standard_price', 'in_stock', 'promotional_red_line_price', 'box_gauge', 'gross_weight', 'box_gross_weight'])
+    validate_resp = utils.validate_dict_not_empty_with_key(params, ['id', 'brand_id', 'name', 'main_img', 'standard_price', 'in_stock', 'promotional_red_line_price', 'box_gauge', 'gross_weight', 'box_gross_weight'])
     if validate_resp.get('code') == 0:
         params.update({'update_date': utils.if_empty_give_now_date()})
         return product_service.save_product(params)
