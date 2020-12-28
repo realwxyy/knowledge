@@ -5,6 +5,7 @@ from src.model.dto.role import Role, RoleSchema
 from src.model.dto.tag import Tag, TagSchema
 from src.model.dto.brand import Brand, BrandSchema
 from src.model.dto.product import Product, ProductSchema
+from src.model.dto.quotation import Quotation, QuotationSchema
 
 # popo
 from src.model.popo.code2session import Code2Session
