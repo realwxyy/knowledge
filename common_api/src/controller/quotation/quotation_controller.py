@@ -1,19 +1,19 @@
 from flask import Blueprint, request
 from src.utils import resp, utils
-from src.service import product_service
+from src.service import quotation_service
 
-gl_product = Blueprint('product', __name__, url_prefix='/product')
+gl_quotation = Blueprint('quotation', __name__, url_prefix='/quotation')
 
 
-@gl_product.route('/product', methods=['post'])
-def product_post():
+@gl_quotation.route('/quotation', methods=['post'])
+def quotation_post():
     '''
-    @description method of add product
-    @params params of add product
-    @return please see message in 
+    @description method of add quotation
+    @params params of add quotation
+    @return please see message in methods
     '''
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['brand_id', 'name', 'main_img', 'standard_price', 'in_stock', 'promotional_red_line_price', 'box_gauge', 'gross_weight', 'box_gross_weight'])
+    validate_resp = utils.validate_dict_not_empty_with_key(params, ['name', 'short_name'])
     if validate_resp.get('code') == 0:
         if params.get('create_date') is None:
             params.update({'create_date': utils.if_empty_give_now_date()})
@@ -21,31 +21,31 @@ def product_post():
             params.update({'update_date': utils.if_empty_give_now_date()})
         if params.get('is_delete') is None:
             params.update({'is_delete': 0})
-        return product_service.save_product(params)
+        return quotation_service.save_quotation(params)
     else:
         return resp.resp_fail({}, validate_resp['msg'])
 
 
-@gl_product.route('/product', methods=['put'])
-def product_put():
+@gl_quotation.route('/quotation', methods=['put'])
+def quotation_put():
     '''
-    @description update product info
+    @description update quotation info
     @params required: id ...
     @return please see return instance
     '''
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['id', 'brand_id', 'name', 'main_img', 'standard_price', 'in_stock', 'promotional_red_line_price', 'box_gauge', 'gross_weight', 'box_gross_weight'])
+    validate_resp = utils.validate_dict_not_empty_with_key(params, ['id', 'name', 'short_name'])
     if validate_resp.get('code') == 0:
         params.update({'update_date': utils.if_empty_give_now_date()})
-        return product_service.save_product(params)
+        return quotation_service.save_quotation(params)
     else:
         return resp.resp_fail({}, validate_resp['msg'])
 
 
-@gl_product.route('/product', methods=['delete'])
-def product_delete():
+@gl_quotation.route('/quotation', methods=['delete'])
+def quotation_delete():
     '''
-    @description delete product (only set product's field —— is_delete to -1)
+    @description delete quotation (only set quotation's field —— is_delete to -1)
     @params required: id
     @return please see return instance
     '''
@@ -53,22 +53,22 @@ def product_delete():
     id = params.get('id')
     validate_resp = utils.validate_dict_not_empty_with_key(params, ['id'])
     if validate_resp.get('code') == 0:
-        product_req = product_service.query_product_by_id(id)
-        if product_req:
-            if product_req.get('is_delete') != -1:
+        quotation_req = quotation_service.query_quotation_by_id(id)
+        if quotation_req:
+            if quotation_req.get('is_delete') != -1:
                 params_req = {}
                 params_req.update({'id': id})
                 params_req.update({'update_date': utils.if_empty_give_now_date()})
                 params_req.update({'is_delete': -1})
-                return product_service.save_product(params_req)
+                return quotation_service.save_quotation(params_req)
             else:
-                return resp.resp_fail({}, '该商品已被删除，无法重复删除')
+                return resp.resp_fail({}, '该报价单已被删除，无法重复删除')
         else:
             return resp.resp_fail({}, '商品信息查询失败，请确认商品id是否正确')
     else:
         return resp.resp_fail({}, validate_resp['msg'])
 
 
-@gl_product.route('/product', methods=['get'])
-def product_get():
+@gl_quotation.route('/quotation', methods=['get'])
+def quotation_get():
     return resp.resp_succ({}, 'with developing....')
