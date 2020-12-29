@@ -1,12 +1,12 @@
 from flask import Blueprint, request
 from src.utils import resp, utils, wechat_login_required
 from src.service import quotation_service
+from src.constant import CONS_COMMON, CONS_CONTROLLER, CONS_REQ_METHOD, CONS_MSG
+
+gl_quotation = Blueprint(CONS_CONTROLLER.QUOTATION, __name__, url_prefix=CONS_CONTROLLER.QUOTATION_PREFIXX)
 
 
-gl_quotation = Blueprint('quotation', __name__, url_prefix='/quotation')
-
-
-@gl_quotation.route('/quotation', methods=['post'])
+@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ROUTE, methods=CONS_REQ_METHOD.POST)
 # @wechat_login_required
 def quotation_post():
     '''
@@ -15,20 +15,20 @@ def quotation_post():
     @return please see message in methods
     '''
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['name', 'short_name'])
-    if validate_resp.get('code') == 0:
-        if params.get('create_date') is None:
-            params.update({'create_date': utils.if_empty_give_now_date()})
-        if params.get('update_date') is None:
-            params.update({'update_date': utils.if_empty_give_now_date()})
-        if params.get('is_delete') is None:
-            params.update({'is_delete': 0})
+    validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_POST_PARAMS)
+    if validate_resp.get(CONS_COMMON.CODE) == 0:
+        if params.get(CONS_COMMON.CREATE_DATE) is None:
+            params.update({CONS_COMMON.CREATE_DATE: utils.if_empty_give_now_date()})
+        if params.get(CONS_COMMON.UPDATE_DATE) is None:
+            params.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
+        if params.get(CONS_COMMON.IS_DELETE) is None:
+            params.update({CONS_COMMON.IS_DELETE: 0})
         return quotation_service.save_quotation(params)
     else:
-        return resp.resp_fail({}, validate_resp['msg'])
+        return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
 
-@gl_quotation.route('/quotation', methods=['put'])
+@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ROUTE, methods=CONS_REQ_METHOD.PUT)
 # @wechat_login_required
 def quotation_put():
     '''
@@ -37,46 +37,46 @@ def quotation_put():
     @return please see return instance
     '''
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['id', 'name', 'short_name'])
-    if validate_resp.get('code') == 0:
-        params.update({'update_date': utils.if_empty_give_now_date()})
+    validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_PUT_PARAMS)
+    if validate_resp.get(CONS_COMMON.CODE) == 0:
+        params.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
         return quotation_service.save_quotation(params)
     else:
-        return resp.resp_fail({}, validate_resp['msg'])
+        return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
 
-@gl_quotation.route('/quotation', methods=['delete'])
+@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ROUTE, methods=CONS_REQ_METHOD.DELETE)
 # @wechat_login_required
 def quotation_delete():
     '''
-    @description delete quotation (only set quotation's field —— is_delete to -1)
+    @description delete quotation (only set quotation's field is_delete to -1)
     @params required: id
     @return please see return instance
     '''
     params = request.values.to_dict()
-    id = params.get('id')
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['id'])
-    if validate_resp.get('code') == 0:
+    id = params.get(CONS_COMMON.ID)
+    validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_DELETE_PARAMS)
+    if validate_resp.get(CONS_COMMON.MSG) == 0:
         quotation_req = quotation_service.query_quotation_by_id(id)
         if quotation_req:
-            if quotation_req.get('is_delete') != -1:
+            if quotation_req.get(CONS_COMMON.IS_DELETE) != -1:
                 params_req = {}
-                params_req.update({'id': id})
-                params_req.update({'update_date': utils.if_empty_give_now_date()})
-                params_req.update({'is_delete': -1})
+                params_req.update({CONS_COMMON.ID: id})
+                params_req.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
+                params_req.update({CONS_COMMON.IS_DELETE: -1})
                 return quotation_service.save_quotation(params_req)
             else:
-                return resp.resp_fail({}, '该报价单已被删除，无法重复删除')
+                return resp.resp_fail({}, CONS_MSG.QUOTATION_DEDUPLICATION)
         else:
-            return resp.resp_fail({}, '商品信息查询失败，请确认报价单id是否正确')
+            return resp.resp_fail({}, CONS_MSG.QUOTATION_INFO_QUERY_FAIL)
     else:
-        return resp.resp_fail({}, validate_resp['msg'])
+        return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
 
-@gl_quotation.route('/mini_list', methods=['get'])
+@gl_quotation.route(CONS_CONTROLLER.QUOTATION_WECHAT_LIST, methods=CONS_REQ_METHOD.GET)
 @wechat_login_required
 def mini_list():
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, ['page', 'size'])
-    if validate_resp.get('code') == 0:
+    validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_WECHAT_LIST_GET_PARAMS)
+    if validate_resp.get(CONS_COMMON.CODE) == 0:
         return quotation_service.mini_queryList(params)

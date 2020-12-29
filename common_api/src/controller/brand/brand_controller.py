@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from src.utils import resp, utils
 from src.service import brand_service
-from src.constant import CONS_COMMON, CONS_CONTROLLER, CONS_CONTROLLER, CONS_REQ_METHOD, CONS_MSG
+from src.constant import CONS_COMMON, CONS_CONTROLLER, CONS_REQ_METHOD, CONS_MSG
 
 gl_brand = Blueprint(CONS_CONTROLLER.BRAND, __name__, url_prefix=CONS_CONTROLLER.BRAND_PREFIX)
 
