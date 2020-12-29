@@ -22,3 +22,5 @@ QUOTATION_ROUTE = '/quotation'
 QUOTATION_POST_PARAMS = ['name', 'short_name']
 QUOTATION_PUT_PARAMS = ['id', 'name', 'short_name']
 QUOTATION_DELETE_PARAMS = ['id']
+QUOTATION_WECHAT_LIST = '/mini_list'
+QUOTATION_WECHAT_LIST_GET_PARAMS = ['page', 'size']
