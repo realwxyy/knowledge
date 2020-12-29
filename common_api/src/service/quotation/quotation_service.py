@@ -29,3 +29,17 @@ def delete_quotation(params):
         return {'code': 0, 'message': '已删除:' + name}
     except Exception:
         return {'code': -1, 'message': '删除失败'}
+
+
+def mini_queryList(params):
+    name = params.get('name')
+    page = int(params.get('page'))
+    size = int(params.get('size'))
+    quotation_schema = QuotationSchema(many=True, only=['id', 'name', 'short_name', 'create_date'])
+    total = Quotation.query.filter(Quotation.is_delete >= 0).count()
+    list = []
+    if name:
+        list = Quotation.query.filter(Quotation.name.like('%' + name + '%') and Quotation.is_delete >= 0).paginate(page=page, per_page=size, error_out=False).items
+    else:
+        list = Quotation.query.filter(Quotation.is_delete >= 0).paginate(page=page, per_page=size, error_out=False).items
+    return {'list': quotation_schema.dump(list), 'total': total}
