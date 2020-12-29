@@ -18,14 +18,14 @@ def wechat_login_required(view_func):
             # 没接收的到token,给前端抛出错误
             # 这里的code推荐写一个文件统一管理。这里为了看着直观就先写死了。
             # return jsonify(code=4103, msg='缺少参数token')
-            return resp.resp_fail({}, '用户无法识别')
+            return resp.resp_unauthorized({}, '用户无法识别')
 
         s = Serializer(current_app.config["SECRET_KEY"])
         try:
             s.loads(third_session)
         except Exception:
             # return jsonify(code=4101, msg="登录已过期")
-            return resp.resp_fail({}, '登录态已过期')
+            return resp.resp_unauthorized({}, '登录态已过期')
 
         return view_func(*args, **kwargs)
 

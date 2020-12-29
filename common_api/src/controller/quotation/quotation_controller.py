@@ -1,11 +1,13 @@
 from flask import Blueprint, request
-from src.utils import resp, utils
+from src.utils import resp, utils, wechat_login_required
 from src.service import quotation_service
+
 
 gl_quotation = Blueprint('quotation', __name__, url_prefix='/quotation')
 
 
 @gl_quotation.route('/quotation', methods=['post'])
+# @wechat_login_required
 def quotation_post():
     '''
     @description method of add quotation
@@ -27,6 +29,7 @@ def quotation_post():
 
 
 @gl_quotation.route('/quotation', methods=['put'])
+# @wechat_login_required
 def quotation_put():
     '''
     @description update quotation info
@@ -43,6 +46,7 @@ def quotation_put():
 
 
 @gl_quotation.route('/quotation', methods=['delete'])
+# @wechat_login_required
 def quotation_delete():
     '''
     @description delete quotation (only set quotation's field —— is_delete to -1)
@@ -64,11 +68,15 @@ def quotation_delete():
             else:
                 return resp.resp_fail({}, '该报价单已被删除，无法重复删除')
         else:
-            return resp.resp_fail({}, '商品信息查询失败，请确认商品id是否正确')
+            return resp.resp_fail({}, '商品信息查询失败，请确认报价单id是否正确')
     else:
         return resp.resp_fail({}, validate_resp['msg'])
 
 
-@gl_quotation.route('/quotation', methods=['get'])
-def quotation_get():
-    return resp.resp_succ({}, 'with developing....')
+@gl_quotation.route('/mini_list', methods=['get'])
+@wechat_login_required
+def mini_list():
+    params = request.values.to_dict()
+    validate_resp = utils.validate_dict_not_empty_with_key(params, ['page', 'size'])
+    if validate_resp.get('code') == 0:
+        return quotation_service.mini_queryList(params)
