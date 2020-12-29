@@ -1,0 +1,6 @@
+CODE = 'code'
+ID = 'id'
+CREATE_DATE = 'create_date'
+UPDATE_DATE = 'update_date'
+IS_DELETE = 'is_delete'
+MSG = 'msg'
