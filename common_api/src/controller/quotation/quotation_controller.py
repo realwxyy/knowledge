@@ -15,15 +15,21 @@ def quotation_post():
     @return please see message in methods
     '''
     params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_POST_PARAMS)
+    # validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_POST_PARAMS)
+    validate_resp = utils.validate_dict_not_empty_with_key(params, [])
     if validate_resp.get(CONS_COMMON.CODE) == 0:
-        if params.get(CONS_COMMON.CREATE_DATE) is None:
+        if not params.get(CONS_COMMON.CREATE_DATE):
             params.update({CONS_COMMON.CREATE_DATE: utils.if_empty_give_now_date()})
-        if params.get(CONS_COMMON.UPDATE_DATE) is None:
+        if not params.get(CONS_COMMON.UPDATE_DATE):
             params.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
-        if params.get(CONS_COMMON.IS_DELETE) is None:
+        if not params.get(CONS_COMMON.IS_DELETE):
             params.update({CONS_COMMON.IS_DELETE: 0})
-        return quotation_service.save_quotation(params)
+        # quotation_base = quotation_service.save_quotation(params)
+        products = params.get('products')
+        if products and len(products) > 0:
+            quotation_products = quotation_service.save_quotation_product(products)
+        # return quotation_service.save_quotation(params)
+        return resp.resp_succ()
     else:
         return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
@@ -80,3 +86,20 @@ def mini_list():
     validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_WECHAT_LIST_GET_PARAMS)
     if validate_resp.get(CONS_COMMON.CODE) == 0:
         return quotation_service.mini_queryList(params)
+
+
+@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ADMIN_LIST, methods=CONS_REQ_METHOD.GET)
+def admin_list():
+    params = request.values.to_dict()
+    return quotation_service.admin_list(params)
+
+
+@gl_quotation.route('/save_product_to_quotation', methods=['POST'])
+def save_procut_to_quotation():
+    params = request.values.to_dict()
+    return quotation_service.save_product_to_quotation(params)
+
+@gl_quotation.route('/test', methods=['get'])
+def test():
+    quotation_products = quotation_service.save_quotation_product({})
+    return {}
