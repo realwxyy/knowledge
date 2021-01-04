@@ -1,4 +1,5 @@
 import time
+import json
 
 
 def dict_not_empty(params, key_arr):
@@ -44,3 +45,12 @@ def if_empty_give_now_date(param=''):
         return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     else:
         return param
+
+
+def get_params(req):
+    params = {}
+    if req.method == 'GET':
+        params = req.args.to_dict()
+    if req.method == 'POST' or req.method == 'PUT':
+        params = json.loads(req.data.decode('UTF-8'))
+    return params

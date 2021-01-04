@@ -16,9 +16,16 @@ def quotation_post():
     @return please see message in methods
     '''
     params = request.values.to_dict()
+    data1 = request.data
+    data2 = request.args
+    data3 = request.form
+    data4 = request.files
+    data5 = request.values
+    data6 = request.json
     print(type(params))
-    req_quotation = json.loads(json.loads(json.dumps(params.get('quotation'))))
-    req_products = json.loads(json.loads(json.dumps(params.get('products'))))
+    return {}
+    req_quotation = params.get('quotation')
+    req_products = params.get('products')
     print(type(req_quotation))
     print(type(req_products))
     validate_resp = utils.validate_dict_not_empty_with_key(req_quotation, CONS_CONTROLLER.QUOTATION_POST_PARAMS)
@@ -107,7 +114,6 @@ def save_procut_to_quotation():
     return quotation_service.save_product_to_quotation(params)
 
 
-@gl_quotation.route('/test', methods=['post'])
+@gl_quotation.route('/test', methods=['get','post','put','delete','patch','head','options'])
 def test():
-    quotation_service.save_quotation_product({})
-    return {}
+    return utils.get_params(request)
