@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from src.utils import resp, utils, wechat_login_required
 from src.service import quotation_service
 from src.constant import CONS_COMMON, CONS_CONTROLLER, CONS_REQ_METHOD, CONS_MSG
+import json
 
 gl_quotation = Blueprint(CONS_CONTROLLER.QUOTATION, __name__, url_prefix=CONS_CONTROLLER.QUOTATION_PREFIXX)
 
@@ -15,8 +16,12 @@ def quotation_post():
     @return please see message in methods
     '''
     params = request.values.to_dict()
-    # validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_POST_PARAMS)
-    validate_resp = utils.validate_dict_not_empty_with_key(params, [])
+    print(type(params))
+    req_quotation = json.loads(json.loads(json.dumps(params.get('quotation'))))
+    req_products = json.loads(json.loads(json.dumps(params.get('products'))))
+    print(type(req_quotation))
+    print(type(req_products))
+    validate_resp = utils.validate_dict_not_empty_with_key(req_quotation, CONS_CONTROLLER.QUOTATION_POST_PARAMS)
     if validate_resp.get(CONS_COMMON.CODE) == 0:
         if not params.get(CONS_COMMON.CREATE_DATE):
             params.update({CONS_COMMON.CREATE_DATE: utils.if_empty_give_now_date()})
@@ -24,10 +29,12 @@ def quotation_post():
             params.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
         if not params.get(CONS_COMMON.IS_DELETE):
             params.update({CONS_COMMON.IS_DELETE: 0})
-        # quotation_base = quotation_service.save_quotation(params)
-        products = params.get('products')
-        if products and len(products) > 0:
-            quotation_products = quotation_service.save_quotation_product(products)
+        quotation = quotation_service.save_quotation(req_quotation)
+        if req_products and len(req_products) > 0:
+            for item in req_products:
+                item.update({'quotation_id': quotation.get('id')})
+            print(req_products)
+            quotation_service.save_quotation_product(req_products)
         # return quotation_service.save_quotation(params)
         return resp.resp_succ()
     else:
@@ -99,7 +106,8 @@ def save_procut_to_quotation():
     params = request.values.to_dict()
     return quotation_service.save_product_to_quotation(params)
 
-@gl_quotation.route('/test', methods=['get'])
+
+@gl_quotation.route('/test', methods=['post'])
 def test():
-    quotation_products = quotation_service.save_quotation_product({})
+    quotation_service.save_quotation_product({})
     return {}

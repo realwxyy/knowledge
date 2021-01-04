@@ -30,7 +30,6 @@ def save_quotation(params):
 
 
 def save_quotation_product(params):
-    params = [{'id': 9, 'product_id': 2, 'quotation_id': 2, 'supply_price': 12.5}, {'id': 10, 'product_id': 2, 'quotation_id': 2, 'supply_price': 13.5}]
     quotation_product_schema = QuotationProductSchema()
     print(type(params))
     print(params)
@@ -39,6 +38,7 @@ def save_quotation_product(params):
     print(quotation_product)
     db.session.bulk_save_objects(quotation_product)
     db.session.commit()
+    # 成功以后怎么返回? 返回成功状态还是 所有插入的数据？
     return {}
     # quotation_products_schema = QuotationProductsSchema()
     # print(params)
