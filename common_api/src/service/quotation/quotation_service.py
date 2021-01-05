@@ -14,7 +14,10 @@ def query_quotation_by_name(name):
     @ return_type dict
     '''
     quotation_schema = QuotationSchema()
-    quotation = Quotation.query.filter(Quotation.zh_name == name).filter(Quotation.is_delete >= 0).first()
+    condition = (and_(Quotation.is_delete >= 0))
+    condition = and_(condition, Quotation.zh_name == name)
+    sql_res = Quotation.query.filter(*condition)
+    quotation = sql_res.first()
     return quotation_schema.dump(quotation)
 
 
