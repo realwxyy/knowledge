@@ -1,7 +1,6 @@
 from sqlalchemy import or_, and_
 from src.model import Quotation, QuotationSchema
 from src.model import QuotationProduct, QuotationProductSchema
-from src.model import QuotationProducts, QuotationProductsSchema
 from src.utils import db
 import time
 
