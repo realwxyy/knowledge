@@ -2,7 +2,6 @@ from flask import Blueprint, request
 from src.utils import resp, utils, wechat_login_required
 from src.service import quotation_service
 from src.constant import CONS_COMMON, CONS_CONTROLLER, CONS_REQ_METHOD, CONS_MSG
-import json
 
 gl_quotation = Blueprint('quotation', __name__, url_prefix='/quotation')
 
@@ -11,9 +10,11 @@ gl_quotation = Blueprint('quotation', __name__, url_prefix='/quotation')
 # @wechat_login_required
 def quotation_post():
     '''
-    @description method of add quotation
-    @params params of add quotation
-    @return please see message in methods
+    @ description method of add quotation
+    @ param params of add quotation
+    @ param_type dict in request
+    @ return please see message in methods
+    @ return_type json
     '''
     params = utils.get_params(request)
     req_quotation = params.get('quotation')
@@ -38,9 +39,11 @@ def quotation_post():
 # @wechat_login_required
 def quotation_put():
     '''
-    @description update quotation info
-    @params required: id ...
-    @return please see return instance
+    @ description update quotation info
+    @ params required: id ...
+    @ param_type dict in request
+    @ return please see return instance
+    @ return_type json
     '''
     params = utils.get_params(request)
     req_quotation = params.get('quotation')
@@ -59,9 +62,11 @@ def quotation_put():
 # @wechat_login_required
 def quotation_delete():
     '''
-    @description delete quotation (only set quotation's field is_delete to -1)
-    @params required: id
-    @return please see return instance
+    @ description delete quotation (only set quotation's field is_delete to -1)
+    @ params required: id
+    @ param_type  dict in reqeust
+    @ return please see return instance
+    @ return_type json
     '''
     params = utils.get_params(request)
     id = params.get(id)
@@ -83,28 +88,30 @@ def quotation_delete():
         return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
 
-@gl_quotation.route(CONS_CONTROLLER.QUOTATION_WECHAT_LIST, methods=CONS_REQ_METHOD.GET)
+@gl_quotation.route('/mini_list', methods=CONS_REQ_METHOD.GET)
 @wechat_login_required
 def mini_list():
+    '''
+    @ description wechat mini program get quotation list
+    @ param json in request eg: page/size/name
+    @ param_type json
+    @ return json of quotation list
+    @ return_type json
+    '''
     params = utils.get_params(request)
-    validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_WECHAT_LIST_GET_PARAMS)
+    validate_resp = utils.validate_dict_not_empty_with_key(params, ['page', 'size'])
     if validate_resp.get(CONS_COMMON.CODE) == 0:
         return quotation_service.mini_queryList(params)
 
 
-@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ADMIN_LIST, methods=CONS_REQ_METHOD.GET)
+@gl_quotation.route('/admin_list', methods=CONS_REQ_METHOD.GET)
 def admin_list():
+    '''
+    @ description background system get quotation list
+    @ param json in request eg: page/size/code(fuzzy query)/name(fuzzy query)
+    @ param_type json in reqeust
+    @ return json of quotation list
+    @ return_type json
+    '''
     params = utils.get_params(request)
     return quotation_service.admin_list(params)
-
-
-@gl_quotation.route('/save_product_to_quotation', methods=['POST'])
-def save_procut_to_quotation():
-    params = utils.get_params(request)
-    return quotation_service.save_product_to_quotation(params)
-
-
-@gl_quotation.route('/test', methods=['get', 'post', 'put', 'delete', 'patch', 'head', 'options'])
-def test():
-    quotation_service.del_products({'id': 14})
-    return resp.resp_succ()
