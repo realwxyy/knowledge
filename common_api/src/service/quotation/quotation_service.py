@@ -108,7 +108,7 @@ def mini_queryList(params):
     page = int(params.get('page'))
     size = int(params.get('size'))
     quotation_schema = QuotationSchema(many=True, only=['id', 'name', 'short_name', 'create_date'])
-    condition = (and_(Quotation.is_delete >= 0))
+    condition = [Quotation.is_delete >= 0]
     if name:
         condition = and_(condition, Quotation.name.like('%' + name + '%'))
     sql_res = Quotation.query.filter(*condition)
@@ -130,15 +130,15 @@ def admin_list(params):
     page = int(params.get('page'))
     size = int(params.get('size'))
     quotation_schema = QuotationSchema(many=True)
-    condition = (and_(Quotation.is_delete >= 0))
+    condition = [Quotation.is_delete >= 0]
     # try:
     if code:
         condition = and_(condition, Quotation.code.like('%' + code + '%'))
     if name:
         condition = and_(condition, Quotation.name.like('%' + name + '%'))
     sql_res = Quotation.query.filter(*condition)
-    total = sql_res.count()
     admin_list = sql_res.paginate(page=page, per_page=size, error_out=False).items
+    total = len(admin_list)
     # except Exception as e:
     #     print(e)
     #     return {'code': -1, 'msg': '服务器异常'}

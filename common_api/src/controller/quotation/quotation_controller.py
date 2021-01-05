@@ -86,7 +86,7 @@ def quotation_delete():
 @gl_quotation.route(CONS_CONTROLLER.QUOTATION_WECHAT_LIST, methods=CONS_REQ_METHOD.GET)
 @wechat_login_required
 def mini_list():
-    params = request.values.to_dict()
+    params = utils.get_params(request)
     validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_WECHAT_LIST_GET_PARAMS)
     if validate_resp.get(CONS_COMMON.CODE) == 0:
         return quotation_service.mini_queryList(params)
@@ -94,13 +94,13 @@ def mini_list():
 
 @gl_quotation.route(CONS_CONTROLLER.QUOTATION_ADMIN_LIST, methods=CONS_REQ_METHOD.GET)
 def admin_list():
-    params = request.values.to_dict()
+    params = utils.get_params(request)
     return quotation_service.admin_list(params)
 
 
 @gl_quotation.route('/save_product_to_quotation', methods=['POST'])
 def save_procut_to_quotation():
-    params = request.values.to_dict()
+    params = utils.get_params(request)
     return quotation_service.save_product_to_quotation(params)
 
 
