@@ -1,3 +1,4 @@
+from src.constant import CONS_COMMON
 import time
 import json
 
@@ -48,9 +49,42 @@ def if_empty_give_now_date(param=''):
 
 
 def get_params(req):
+    '''
+    @ desc package request params according to request method
+    @ param reqeust
+    @ param_type request
+    @ return_type dict
+    '''
     params = {}
     if req.method == 'GET':
         params = req.args.to_dict()
     if req.method == 'POST' or req.method == 'PUT':
         params = json.loads(req.data.decode('UTF-8'))
     return params
+
+
+def assign_post_fields(item):
+    '''
+    @ desc assign common fields eg: create_date/udpate_date/is_delete
+    @ param dict to be handled
+    @ param_type dict
+    @ return_type dict
+    '''
+    if not item.get(CONS_COMMON.CREATE_DATE):
+        item.update({CONS_COMMON.CREATE_DATE: if_empty_give_now_date()})
+    if not item.get(CONS_COMMON.UPDATE_DATE):
+        item.update({CONS_COMMON.UPDATE_DATE: if_empty_give_now_date()})
+    if not item.get(CONS_COMMON.IS_DELETE):
+        item.update({CONS_COMMON.IS_DELETE: 0})
+    return item
+
+def assign_delete_fields(item):
+    '''
+    @ desc assign save fields eg: update_date/is_delete
+    @ param dict to be handled
+    @ param_type dict
+    @ return_type dict
+    '''
+    item.update({CONS_COMMON.UPDATE_DATE: if_empty_give_now_date()})
+    item.update({CONS_COMMON.IS_DELETE: -1})
+    return item

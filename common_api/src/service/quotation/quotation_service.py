@@ -3,26 +3,40 @@ from src.model import Quotation, QuotationSchema
 from src.model import QuotationProduct, QuotationProductSchema
 from src.model import QuotationProducts, QuotationProductsSchema
 from src.utils import db
-import json
+import time
 
 
 def query_quotation_by_name(name):
+    '''
+    @ description query quotation with quotation's name (may be no useful)
+    @ param quotation's name
+    @ param_type string
+    @ return_type dict
+    '''
     quotation_schema = QuotationSchema()
     quotation = Quotation.query.filter(Quotation.zh_name == name).filter(Quotation.is_delete >= 0).first()
     return quotation_schema.dump(quotation)
 
 
 def query_quotation_by_id(id):
+    '''
+    @ description query quotation with quotation's id
+    @ param quotation's id
+    @ param_type number
+    @ return_type dict
+    '''
     quotation_schema = QuotationSchema()
     quotation = Quotation.query.get(id)
     return quotation_schema.dump(quotation)
 
 
 def save_quotation(params):
-    '''save quotation
-    @param params: dict of quotation object
-    @return: a dict of added quotation
-    @return type: dict
+    '''
+    @ description save quotation
+    @ param dict of quotation object
+    @ param_type a dict of added quotation
+    @ return dict of added quotation
+    @ return_type: dict
     '''
     quotation_schema = QuotationSchema()
     quotation = quotation_schema.load(params, session=db.session)
@@ -30,24 +44,46 @@ def save_quotation(params):
 
 
 def save_quotation_product(params):
+    '''
+    @ description save quotation's product
+    @ param dict of added quotation products
+    @ param_type dict
+    @ return None
+    @ return_type None
+    '''
     quotation_product_schema = QuotationProductSchema()
-    print(type(params))
-    print(params)
     quotation_product = quotation_product_schema.load(params, session=db.session, many=True)
-    # print(quotation_product_schema.dump(quotation_product))
-    print(quotation_product)
     db.session.bulk_save_objects(quotation_product)
     db.session.commit()
-    # 成功以后怎么返回? 返回成功状态还是 所有插入的数据？
-    return {}
-    # quotation_products_schema = QuotationProductsSchema()
-    # print(params)
-    # quottion_products = quotation_products_schema.load(params, many=True)
-    # print(quotation_products_schema.dump(quottion_products))
-    # return {}
+
+
+def del_products(params):
+    '''
+    @ description set is_delete to -1 and assign udpate_date to now time which quotation_id = params's id
+    @ param dict of id
+    @ param_type dict
+    @ return None
+    @ return_type None
+    '''
+    id = int(params.get('id'))
+    condition = (and_(QuotationProduct.is_delete >= 0))
+    condition = and_(condition, QuotationProduct.quotation_id == id)
+    quotation_products = QuotationProduct.query.filter(*condition)
+    for item in quotation_products:
+        item.is_delete = -1
+        item.update_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    db.session.bulk_save_objects(quotation_products)
+    db.session.commit()
 
 
 def delete_quotation(params):
+    '''
+    @ description set is_delete to -q and assign update_date to now time which quotation_id = param's id
+    @ param dict to be processed
+    @ param_type dict
+    @ return dict to delete result (keep it like this for now)
+    @ return_type dict
+    '''
     quotation_schema = QuotationSchema()
     try:
         quotation = quotation_schema.load(params, session=db.session)
@@ -59,20 +95,34 @@ def delete_quotation(params):
 
 
 def mini_queryList(params):
+    '''
+    @ description wechat mini program quotation list
+    @ param dict of query eg: quotation name/page/size
+    @ param_type dict
+    @ return dict of quotation list
+    @ return_type dict
+    '''
     name = params.get('name')
     page = int(params.get('page'))
     size = int(params.get('size'))
     quotation_schema = QuotationSchema(many=True, only=['id', 'name', 'short_name', 'create_date'])
-    total = Quotation.query.filter(Quotation.is_delete >= 0).count()
-    list = []
+    condition = (and_(Quotation.is_delete >= 0))
     if name:
-        list = Quotation.query.filter(Quotation.name.like('%' + name + '%') and Quotation.is_delete >= 0).paginate(page=page, per_page=size, error_out=False).items
-    else:
-        list = Quotation.query.filter(Quotation.is_delete >= 0).paginate(page=page, per_page=size, error_out=False).items
+        condition = and_(condition, Quotation.name.like('%' + name + '%'))
+    sql_res = Quotation.query.filter(*condition)
+    total = sql_res.count()
+    list = sql_res.paginate(page=page, per_page=size, error_out=False).items
     return {'list': quotation_schema.dump(list), 'total': total}
 
 
 def admin_list(params):
+    '''
+    @ description background system quotation list
+    @ param dict of query eg: code/quotation_name/page/size
+    @ param_type dict
+    @ return dict of quottion list
+    @ return_type dict
+    '''
     code = params.get('code')
     name = params.get('name')
     page = int(params.get('page'))
@@ -91,7 +141,3 @@ def admin_list(params):
     #     print(e)
     #     return {'code': -1, 'msg': '服务器异常'}
     return {'list': quotation_schema.dump(admin_list), 'total': total}
-
-
-def save_product_to_quotation(params):
-    return {}

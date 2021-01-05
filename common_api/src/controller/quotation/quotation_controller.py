@@ -4,10 +4,10 @@ from src.service import quotation_service
 from src.constant import CONS_COMMON, CONS_CONTROLLER, CONS_REQ_METHOD, CONS_MSG
 import json
 
-gl_quotation = Blueprint(CONS_CONTROLLER.QUOTATION, __name__, url_prefix=CONS_CONTROLLER.QUOTATION_PREFIXX)
+gl_quotation = Blueprint('quotation', __name__, url_prefix='/quotation')
 
 
-@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ROUTE, methods=CONS_REQ_METHOD.POST)
+@gl_quotation.route('/quotation', methods=CONS_REQ_METHOD.POST)
 # @wechat_login_required
 def quotation_post():
     '''
@@ -15,40 +15,26 @@ def quotation_post():
     @params params of add quotation
     @return please see message in methods
     '''
-    params = request.values.to_dict()
-    data1 = request.data
-    data2 = request.args
-    data3 = request.form
-    data4 = request.files
-    data5 = request.values
-    data6 = request.json
-    print(type(params))
-    return {}
+    params = utils.get_params(request)
     req_quotation = params.get('quotation')
     req_products = params.get('products')
-    print(type(req_quotation))
-    print(type(req_products))
     validate_resp = utils.validate_dict_not_empty_with_key(req_quotation, CONS_CONTROLLER.QUOTATION_POST_PARAMS)
-    if validate_resp.get(CONS_COMMON.CODE) == 0:
-        if not params.get(CONS_COMMON.CREATE_DATE):
-            params.update({CONS_COMMON.CREATE_DATE: utils.if_empty_give_now_date()})
-        if not params.get(CONS_COMMON.UPDATE_DATE):
-            params.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
-        if not params.get(CONS_COMMON.IS_DELETE):
-            params.update({CONS_COMMON.IS_DELETE: 0})
+    if validate_resp.get('code') == 0:
+        req_quotation = utils.assign_post_fields(req_quotation)
         quotation = quotation_service.save_quotation(req_quotation)
         if req_products and len(req_products) > 0:
             for item in req_products:
                 item.update({'quotation_id': quotation.get('id')})
-            print(req_products)
+                item = utils.assign_post_fields(item)
             quotation_service.save_quotation_product(req_products)
-        # return quotation_service.save_quotation(params)
-        return resp.resp_succ()
+            return resp.resp_succ()
+        else:
+            return resp.resp_fail({}, 'products参数验证失败')
     else:
         return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
 
-@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ROUTE, methods=CONS_REQ_METHOD.PUT)
+@gl_quotation.route('/quotation', methods=CONS_REQ_METHOD.PUT)
 # @wechat_login_required
 def quotation_put():
     '''
@@ -56,16 +42,20 @@ def quotation_put():
     @params required: id ...
     @return please see return instance
     '''
-    params = request.values.to_dict()
-    validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_PUT_PARAMS)
-    if validate_resp.get(CONS_COMMON.CODE) == 0:
-        params.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
-        return quotation_service.save_quotation(params)
+    params = utils.get_params(request)
+    req_quotation = params.get('quotation')
+    req_products = params.get('products')
+    validate_resp = utils.validate_dict_not_empty_with_key(req_quotation, CONS_CONTROLLER.QUOTATION_PUT_PARAMS)
+    if validate_resp.get('code') == 0:
+        req_quotation.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
+        quotation_service.save_quotation(req_quotation)
+        quotation_service.save_quotation_product(req_products)
+        return resp.resp_succ(message='修改成功')
     else:
         return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
 
-@gl_quotation.route(CONS_CONTROLLER.QUOTATION_ROUTE, methods=CONS_REQ_METHOD.DELETE)
+@gl_quotation.route('/quotation', methods=CONS_REQ_METHOD.DELETE)
 # @wechat_login_required
 def quotation_delete():
     '''
@@ -73,18 +63,18 @@ def quotation_delete():
     @params required: id
     @return please see return instance
     '''
-    params = request.values.to_dict()
-    id = params.get(CONS_COMMON.ID)
+    params = utils.get_params(request)
+    id = params.get(id)
     validate_resp = utils.validate_dict_not_empty_with_key(params, CONS_CONTROLLER.QUOTATION_DELETE_PARAMS)
     if validate_resp.get(CONS_COMMON.MSG) == 0:
         quotation_req = quotation_service.query_quotation_by_id(id)
         if quotation_req:
             if quotation_req.get(CONS_COMMON.IS_DELETE) != -1:
                 params_req = {}
-                params_req.update({CONS_COMMON.ID: id})
-                params_req.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
-                params_req.update({CONS_COMMON.IS_DELETE: -1})
-                return quotation_service.save_quotation(params_req)
+                params_req.update({'id': id})
+                quotation_service.del_products(params_req)
+                params_req = utils.assign_delete_fields(params_req)
+                quotation_service.save_quotation(params_req)
             else:
                 return resp.resp_fail({}, CONS_MSG.QUOTATION_DEDUPLICATION)
         else:
@@ -114,6 +104,7 @@ def save_procut_to_quotation():
     return quotation_service.save_product_to_quotation(params)
 
 
-@gl_quotation.route('/test', methods=['get','post','put','delete','patch','head','options'])
+@gl_quotation.route('/test', methods=['get', 'post', 'put', 'delete', 'patch', 'head', 'options'])
 def test():
-    return utils.get_params(request)
+    quotation_service.del_products({'id': 14})
+    return resp.resp_succ()
