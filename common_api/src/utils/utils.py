@@ -62,6 +62,19 @@ def get_params(req):
         params = json.loads(req.data.decode('UTF-8'))
     return params
 
+def get_wechat_params(req):
+    '''
+    @ desc package request params according to request method
+    @ param reqeust
+    @ param_type request
+    @ return_type dict
+    '''
+    params = {}
+    if req.method == 'GET' or req.method == 'DELETE':
+        params = req.args.to_dict()
+    if req.method == 'POST' or req.method == 'PUT':
+        params = req.form.to_dict()
+    return params
 
 def assign_post_fields(item):
     '''

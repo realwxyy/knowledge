@@ -7,3 +7,4 @@ import src.service.tag.tag_service as tag_service
 import src.service.brand.brand_service as brand_service
 import src.service.product.product_service as product_service
 import src.service.quotation.quotation_service as quotation_service
+import src.service.wechat.wechat_service as wechat_service
