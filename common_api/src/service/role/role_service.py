@@ -8,13 +8,19 @@ def query_role_by_name(name):
     return role_schema.dump(role)
 
 
-def add_role(params):
+def query_role_by_id(id):
+    role_schema = RoleSchema()
+    role = Role.query.get(id)
+    return role_schema.dump(role)
+
+
+def save_role(params):
     role_schema = RoleSchema()
     role = role_schema.load(params, session=db.session)
     return role_schema.dump(role.save())
 
 
 def query_roles():
-    role_schema = RoleSchema(many=True, only=['id', 'name', 'level', 'remark', 'create_date', 'update_date'])
+    role_schema = RoleSchema(many=True, only=['id', 'name', 'level', 'remark'])
     roles = Role.query.all()
     return role_schema.dump(roles)

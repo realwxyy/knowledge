@@ -13,6 +13,7 @@ class Role(db.Model):
     remark = db.Column(db.String(64))
     create_date = db.Column(db.DateTime(10))
     update_date = db.Column(db.DateTime(10))
+    is_delete = db.Column(db.Integer())
 
     def get_schema(self):
         return {
@@ -22,6 +23,7 @@ class Role(db.Model):
             'remark': self.remark,
             'create_date': self.create_date,
             'update_date': self.update_date,
+            'is_delete': self.is_delete
         }
 
     def save(self):
@@ -40,3 +42,4 @@ class RoleSchema(ModelSchema):
     remark = fields.String()
     create_date = fields.DateTime()
     update_date = fields.DateTime()
+    is_delete = fields.Number()

@@ -56,7 +56,7 @@ def get_params(req):
     @ return_type dict
     '''
     params = {}
-    if req.method == 'GET':
+    if req.method == 'GET' or req.method == 'DELETE':
         params = req.args.to_dict()
     if req.method == 'POST' or req.method == 'PUT':
         params = json.loads(req.data.decode('UTF-8'))
@@ -77,6 +77,18 @@ def assign_post_fields(item):
     if not item.get(CONS_COMMON.IS_DELETE):
         item.update({CONS_COMMON.IS_DELETE: 0})
     return item
+
+
+def assign_put_fields(item):
+    '''
+    @ desc assign save fields eg: update_date
+    @ param dict to be handled
+    @ param_type dict
+    @ return_type dict
+    '''
+    item.update({CONS_COMMON.UPDATE_DATE: if_empty_give_now_date()})
+    return item
+
 
 def assign_delete_fields(item):
     '''
