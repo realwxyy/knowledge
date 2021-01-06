@@ -1,4 +1,4 @@
-from flask import Flask, current_app, request
+from flask import Flask, request
 from src.config.config import DevelopmentConfig
 from src.controller import resgister_all_bluePrint
 from src.utils import db, resp, get_logger
