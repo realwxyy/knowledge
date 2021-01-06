@@ -9,7 +9,6 @@ gl_wechat = Blueprint('wechat', __name__, url_prefix='/wechat')
 
 @gl_wechat.route('/add_app_config', methods=['post'])
 def add_app_config():
-    # params = request.values.to_dict()
     params = utils.get_params(request)
     validate_resp = utils.validate_dict_not_empty_with_key(params, ['app_id', 'app_secret'])
     if validate_resp.get('code') == 0:
