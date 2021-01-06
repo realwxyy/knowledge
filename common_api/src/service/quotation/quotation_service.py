@@ -1,7 +1,6 @@
 from sqlalchemy import or_, and_
 from src.model import Quotation, QuotationSchema
 from src.model import QuotationProduct, QuotationProductSchema
-from src.model import QuotationProducts, QuotationProductsSchema
 from src.utils import db
 import time
 
@@ -14,7 +13,10 @@ def query_quotation_by_name(name):
     @ return_type dict
     '''
     quotation_schema = QuotationSchema()
-    quotation = Quotation.query.filter(Quotation.zh_name == name).filter(Quotation.is_delete >= 0).first()
+    condition = (and_(Quotation.is_delete >= 0))
+    condition = and_(condition, Quotation.zh_name == name)
+    sql_res = Quotation.query.filter(*condition)
+    quotation = sql_res.first()
     return quotation_schema.dump(quotation)
 
 
@@ -106,7 +108,7 @@ def mini_queryList(params):
     page = int(params.get('page'))
     size = int(params.get('size'))
     quotation_schema = QuotationSchema(many=True, only=['id', 'name', 'short_name', 'create_date'])
-    condition = (and_(Quotation.is_delete >= 0))
+    condition = [Quotation.is_delete >= 0]
     if name:
         condition = and_(condition, Quotation.name.like('%' + name + '%'))
     sql_res = Quotation.query.filter(*condition)
@@ -128,15 +130,15 @@ def admin_list(params):
     page = int(params.get('page'))
     size = int(params.get('size'))
     quotation_schema = QuotationSchema(many=True)
-    condition = (and_(Quotation.is_delete >= 0))
+    condition = [Quotation.is_delete >= 0]
     # try:
     if code:
         condition = and_(condition, Quotation.code.like('%' + code + '%'))
     if name:
         condition = and_(condition, Quotation.name.like('%' + name + '%'))
     sql_res = Quotation.query.filter(*condition)
-    total = sql_res.count()
     admin_list = sql_res.paginate(page=page, per_page=size, error_out=False).items
+    total = len(admin_list)
     # except Exception as e:
     #     print(e)
     #     return {'code': -1, 'msg': '服务器异常'}
