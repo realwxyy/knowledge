@@ -5,12 +5,19 @@ import time
 
 
 def save_wechat_user(params):
+    '''
+    @ description save wechat user
+    '''
     wechat_user_schema = WechatUserSchema()
     wechat_user = wechat_user_schema.load(params, session=db.session)
     return wechat_user_schema.dump(wechat_user.save())
 
 
 def get_wechat_user_by_open_id(openId):
+    '''
+    @ description query wechat user info by open_id
+    *** open_id is unique ***
+    '''
     wechat_user_schema = WechatUserSchema()
     condition = and_(WechatUser.is_delete >= 0)
     condition = and_(condition, WechatUser.open_id == openId)
