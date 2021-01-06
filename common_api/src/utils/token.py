@@ -1,5 +1,5 @@
 # 导入依赖包
-from flask import request, jsonify, current_app
+from flask import request, current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import response as resp
 import functools

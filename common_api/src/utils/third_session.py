@@ -36,7 +36,8 @@ def gen_3rdsession(params):
     # 用 openId 和 session_key 加密生成 3rd session
     # 过期时间为 60s * 60m * 24h * 30d
     # .decode("ascii")必加 一下午就解决这个 bug 了 不然是 byte 类型 jsonify 方法无法转换byte类型
-    s = Serializer(current_app.config['SECRET_KEY'], 60 * 60 * 24 * 31)
+    # s = Serializer(current_app.config['SECRET_KEY'], 60 * 60 * 24 * 31)
+    s = Serializer(current_app.config['SECRET_KEY'], 60 * 60)
     third_session = s.dumps(params).decode("ascii")
     return third_session
 
@@ -46,3 +47,8 @@ def decrypt_3rdsession(third_session):
     s = Serializer(current_app.config['SECRET_KEY'])
     params = s.loads(third_session)
     return params
+
+
+def decrypt_3rdsession_from_reqeust(req):
+    third_session = req.headers["wechat_third_session"]
+    return decrypt_3rdsession(third_session)

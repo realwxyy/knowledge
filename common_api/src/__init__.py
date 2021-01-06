@@ -1,1 +1,1 @@
-from src.app.app import app, logger, db
+from src.app.app import app, db

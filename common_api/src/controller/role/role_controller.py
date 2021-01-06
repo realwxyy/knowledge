@@ -1,5 +1,5 @@
-from flask import Blueprint, request
-from src.utils import resp, utils
+from flask import Blueprint, request, current_app
+from src.utils import resp, utils, get_logger
 from src.service import role_service
 
 gl_role = Blueprint('role', __name__, url_prefix='/role')
