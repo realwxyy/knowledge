@@ -9,6 +9,13 @@ gl_wechat = Blueprint('wechat', __name__, url_prefix='/wechat')
 
 @gl_wechat.route('/add_app_config', methods=['post'])
 def add_app_config():
+    '''
+    @ description add wx app config (appid,appsecret...)
+    @ param app config
+    @ param_type json in request
+    @ return dict of added app_config
+    @ return_type json
+    '''
     params = utils.get_params(request)
     validate_resp = utils.validate_dict_not_empty_with_key(params, ['app_id', 'app_secret'])
     if validate_resp.get('code') == 0:
@@ -28,6 +35,17 @@ def add_app_config():
 @gl_wechat.route('/get_user', methods=['post'])
 @wechat_login_required
 def get_user():
+    '''
+    @ description 
+        when people granted in mini program
+        people can get the userInfo from database
+        this method can update people's info too
+        *** hold openid unique ***
+    @ param dict of userInfo eg:nickName,avatar
+    @ param_type json
+    @ return wechatUser dict
+    @ return type json
+    '''
     params = utils.get_wechat_params(request)
     dict = third_session.decrypt_3rdsession_from_reqeust(request)
     open_id = dict.get('openid')
