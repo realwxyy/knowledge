@@ -1,0 +1,17 @@
+<!-- 卖家版 quotation-card -->
+<view class="quotation-card">
+  <view class="hot-area" bindtap="chooseQuotation">
+    <view class="check">
+      <van-checkbox value="{{ quotation.checked }}" checked-color="#ea9920" />
+    </view>
+    <view class="logo">
+      <van-image width="180rpx" height="180rpx" fit="cover" src="{{oss + quotation.main_img}}" />
+    </view>
+  </view>
+  <view class="main-info">
+    <view class="name">{{quotation.name}}</view>
+    <view class="tag"></view>
+    <view class="date">{{quotation.create_date}}</view>
+  </view>
+  <view class="button-area"></view>
+</view>

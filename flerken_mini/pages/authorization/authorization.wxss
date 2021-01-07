@@ -1,0 +1,49 @@
+/**authorization.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  border-top: 2rpx solid #eee;
+  padding-top: 150rpx;
+  
+}
+
+.logo-container {
+  width: 400rpx;
+  height: 400rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 300rpx;
+  height: 300rpx;
+}
+
+.logo-text {
+  margin: 20rpx 0rpx 60rpx;
+  font-size: 38rpx;
+}
+
+.tip {
+  font-size: 30rpx;
+  margin: 10rpx 0rpx 5rpx;
+}
+
+.operate-button {
+  width: 80%;
+  margin: 40rpx 0rpx 20rpx;
+}
+
+.grant-button,
+.cancel-button {
+  width: 100%;
+}
+
+.cancel-button {
+  margin-top: 50rpx;
+}

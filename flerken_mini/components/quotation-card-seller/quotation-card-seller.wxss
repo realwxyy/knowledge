@@ -1,0 +1,52 @@
+.quotation-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0rpx 40rpx;
+  box-sizing: border-box;
+  height: 240rpx;
+  background-color: #fff;
+  border-bottom: 1rpx solid #ddd;
+}
+
+.hot-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.logo {
+  padding-left: 40rpx;
+}
+
+.main-info {
+  width: 100%;
+  height: 84%;
+  padding-left: 40rpx;
+}
+
+.name {
+  color: #333333;
+  font-weight: bold;
+  font-size: 28rpx;
+}
+
+.date {
+  color: #666666;
+  font-size: 24rpx;
+}
+
+.name,
+.date {
+  width: 100%;
+  height: 20%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.tag {
+  width: 100%;
+  height: 60%;
+}

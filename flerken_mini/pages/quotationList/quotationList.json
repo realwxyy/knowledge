@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "报价单列表",
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-search": "@vant/weapp/search/index",
+    "van-tabbar": "@vant/weapp/tabbar/index",
+    "van-tabbar-item": "@vant/weapp/tabbar-item/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-transition": "@vant/weapp/transition/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "quotation-card-seller": "/components/quotation-card-seller/quotation-card-seller"
+  }
+}

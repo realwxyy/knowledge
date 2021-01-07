@@ -1,0 +1,21 @@
+<!--authorization.wxml-->
+<view class="container">
+  <view class="logo-container">
+    <image class="logo" src='../../static/logo_duomeng.png' />
+  </view>
+  <view class="logo-text">多萌订货系统</view>
+  <view class="tip">小程序申请获取以下权限：</view>
+  <view class="tip">获取您的公开信息（头像、昵称等）</view>
+  <view class="operate-button">
+    <view class="grant-button">
+      <van-button color="#ea9920" open-type="getUserInfo" block bind:getuserinfo="getUserInfo">授 权</van-button>
+    </view>
+    <view class="cancel-button">
+      <van-button block color="#ffe2b6" plain>取消授权</van-button>
+    </view>
+  </view>
+  <!-- <view class="test">
+    <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">授 权</button>
+    <button bindtap="getUsers">getUsers</button>
+  </view> -->
+</view>
