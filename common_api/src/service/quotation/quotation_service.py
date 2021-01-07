@@ -107,10 +107,10 @@ def mini_queryList(params):
     name = params.get('name')
     page = int(params.get('page'))
     size = int(params.get('size'))
-    quotation_schema = QuotationSchema(many=True, only=['id', 'name', 'short_name', 'create_date'])
+    quotation_schema = QuotationSchema(many=True, only=['id', 'main_img', 'name', 'short_name', 'description', 'create_date'])
     condition = [Quotation.is_delete >= 0]
     if name:
-        condition = and_(condition, Quotation.name.like('%' + name + '%'))
+        condition.append(Quotation.name.like('%' + name + '%'))
     sql_res = Quotation.query.filter(*condition)
     total = sql_res.count()
     list = sql_res.paginate(page=page, per_page=size, error_out=False).items
