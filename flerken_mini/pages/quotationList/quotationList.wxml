@@ -1,15 +1,22 @@
 <!--logs.wxml-->
 <view class="container log-list">
-  <van-search custom-class="search" bind:change="setQuotationName" use-action-slot shape="round" placeholder="请输入报价单名称">
+  <van-search wx:if="{{grant}}" custom-class="search" bind:change="setQuotationName" use-action-slot shape="round"
+    placeholder="请输入报价单名称">
     <view slot="action" bind:tap="quotationSearch" class="search-text">搜索</view>
   </van-search>
-  <scroll-view scroll-y="true" style="height: 1028rpx;" bindscrolltoupper="upper" bindscrolltolower="lower"
-    bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+  <view wx:if="{{!grant}}" class="login-tip" style="height:100%;background:#fff;">
+    <van-empty description="登录后可查看所拥有的报价单">
+      <van-button custom-class="login-button" plain color="#ea9920" bind:tap="toAuthorization">登录</van-button>
+    </van-empty>
+  </view>
+  <scroll-view wx:else scroll-y="true" style="height: 1028rpx;" bindscrolltolower="loadQuotation">
     <block wx:for="{{list}}" wx:for-item="item" wx:key="i" wx:for-index="i">
       <quotation-card-seller quotation="{{item}}" bindchooseQuotation="chooseQuotation" />
     </block>
-    <view class="loading">
-      <van-loading size="24px" color="#ea9920"><span class="loading-text">加载中...</span></van-loading>
+    <view class="loading" wx:if="{{showLoading}}">
+      <van-loading wx:if="{{loading}}" size="24px" color="#ea9920"><span class="loading-text">加载中...</span>
+      </van-loading>
+      <view wx:else><span class="loading-text">加载完毕</span></view>
     </view>
   </scroll-view>
   <van-tabbar active-color="#ea9920" active="{{ 0 }}" bind:change="onChange">
@@ -17,7 +24,7 @@
     <van-tabbar-item icon="orders-o">订单</van-tabbar-item>
     <van-tabbar-item icon="user-o">我的</van-tabbar-item>
   </van-tabbar>
-  <view class="share-icon">
+  <view class="share-icon" wx:if="{{grant}}">
     <view class="usual">
       <van-icon name="success" size="40rpx" color="#ea9920" />
     </view>

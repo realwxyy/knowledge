@@ -11,7 +11,7 @@
       <van-button color="#ea9920" open-type="getUserInfo" block bind:getuserinfo="getUserInfo">授 权</van-button>
     </view>
     <view class="cancel-button">
-      <van-button block color="#ffe2b6" plain>取消授权</van-button>
+      <van-button block color="#ffe2b6" plain bind:tap="cancelGrant">取消授权</van-button>
     </view>
   </view>
   <!-- <view class="test">

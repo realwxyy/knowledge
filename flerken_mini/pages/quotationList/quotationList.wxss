@@ -22,6 +22,12 @@ page {
   color: #ea9920;
 }
 
+.login-button {
+  width: 180rpx !important;
+  height: 60rpx !important;
+  font-size: 24rpx !important;
+}
+
 .loading {
   display: flex;
   height: 80rpx;
@@ -54,7 +60,7 @@ page {
   justify-content: center;
   align-items: center;
   border-radius: 30rpx;
-  border: 1rpx solid #eee;
+  border: 1rpx solid #ddd;
   background-color: #fff;
 }
 

@@ -2,18 +2,28 @@ import { code2session, getWechatMa } from '../api/login'
 import { getWechatUser } from '../api/user'
 import { requestUrl, appid } from '../config/path'
 import { page_quotationList, page_authorization } from '../config/page'
-import { wxLogin, setStorageSync, getStorageSync, removeStorageSync, wxRelaunch, wxNavigateTo } from './common'
+import { checkSession, wxLogin, setStorageSync, getStorageSync, removeStorageSync, wxRelaunch, wxNavigateTo } from './common'
 // const cookie = require('./weapp-cookie')
 
-const wxLoginSucc = res => {
+const wxLoginSucc = async res => {
+  // debugger
+  console.log(res)
   let { code } = res
-  code2session({ code, appid }).then(res => {
-    console.log(res)
-    if (res.code === 0) {
-      setStorageSync('wechat_third_session', res.data.third_session)
-      // wxRelaunch(page_quotationList)
-    }
-  })
+  const data = await code2session({ code, appid })
+  console.log(data)
+  if(data.code === 0) {
+    setStorageSync('wechat_third_session', data.data.third_session)
+    login()
+  }
+  // .then(res => {
+  //   console.log(res)
+  //   if (res.code === 0) {
+  //     setStorageSync('wechat_third_session', res.data.third_session)
+  //     // wxRelaunch(page_quotationList)
+  //   } else {
+  //     console.log('wechat_third_session 生成失败....')
+  //   }
+  // })
 }
 
 const wxLoginFail = fail => { console.log(fail) }
@@ -29,21 +39,24 @@ export const login = () => {
         wxRelaunch(page_quotationList)
       }
     })
-  } else {
-    wxNavigateTo(page_authorization)
-  }
+  } 
+  // else {
+  //   wxNavigateTo(page_authorization)
+  // }
 }
 
 const reLogin = () => {
-  const session_key = getStorageSync('session_key')
-  if (session_key) {
-    // 登录
-    login()
-  } else {
-    // wx.login
-    wxLogin(wxLoginSucc, wxLoginFail)
-    wxNavigateTo(page_authorization)
-  }
+  // 微信登录
+  wxLogin(wxLoginSucc, wxLoginFail)
+  //登录
+  // login()
+  // const session_key = getStorageSync('session_key')
+  // if (session_key) {
+  //   login()
+  // } else {
+  //   wxLogin(wxLoginSucc, wxLoginFail)
+  //   wxNavigateTo(page_authorization)
+  // }
 }
 
 /**
@@ -52,11 +65,11 @@ const reLogin = () => {
 const handleError = res => {
   if (res.code === -1) {
     // 重新登录逻辑
-    removeStorageSync('grant_data')
-    removeStorageSync('session_key')
-    removeStorageSync('seller')
-    removeStorageSync('user')
-    reLogin()
+    removeStorageSync('wechat_third_session')
+    removeStorageSync('wechatUserInfo')
+    removeStorageSync('userInfo')
+    // reLogin()
+    wxLogin(wxLoginSucc, wxLoginFail)
   }
 }
 
@@ -66,7 +79,8 @@ const handleError = res => {
 const reqeust = (url, data, header, method) => {
   url = requestUrl + url
   const wechat_third_session = getStorageSync('wechat_third_session')
-  if (wechat_third_session) {
+  const grant = getStorageSync('grant')
+  if (wechat_third_session && grant) {
     header = Object.assign({}, header, { 'wechat_third_session': wechat_third_session })
   }
   return new Promise((resolve, reject) => {
