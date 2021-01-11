@@ -6,14 +6,14 @@ import { page_quotationList, page_authorization } from '../../config/page'
 
 const data = {
   list: [],
-  page: 0,
+  page: 1,
   size: 10,
   quotationName: '',
   checkedNum: 0,
   sharePopup: false,
-  maxPage: 0,
+  maxPage: 1,
   loading: true,
-  showLoading: false,
+  showLoading: true,
   grant: false
 }
 
@@ -21,7 +21,6 @@ const onLoad = function () { }
 
 const onShow = function () {
   this.inialData()
-  let showLoading = false
   // grant undefined 执行查询
   // grant true 执行查询
   // grant false 不执行
@@ -33,7 +32,9 @@ const onShow = function () {
 
 const inialData = function () {
   let checkedNum = 0
-  this.setData({ checkedNum })
+  let list = []
+  let page = 1
+  this.setData({ checkedNum, list, page })
 }
 
 const queryQuotationList = function (nextPage = 0) {
@@ -47,25 +48,33 @@ const queryQuotationList = function (nextPage = 0) {
   let loading = this.data.loading
   let showLoading = this.data.showLoading
   let total = 0
-  let list = []
+  let list = this.data.list
   getQuotationList({ page, size, name }).then(res => {
     if (res.code === 0) {
-      list = res.data.list
-      list.forEach(o => o.checked = false)
+      list = list.concat(res.data.list)
+      list.forEach(o => {
+        if (!o.checked) {
+          o.checked = false
+        }
+      })
       total = res.data.total
       if (total % size > 0) {
         maxPage = parseInt(total / size) + 1
       } else {
         maxPage = parseInt(total / size)
       }
-      if (page + 1 >= maxPage) {
+      if (page >= maxPage) {
         loading = false
         showLoading = false
+      } else {
+        page = page + 1
+        loading = true
+        showLoading = true
       }
     } else {
       Dialog.alert({ title: '失败', message: res.message })
     }
-    this.setData({ list, maxPage, loading, showLoading })
+    this.setData({ list, maxPage, loading, showLoading, page })
   })
 }
 
@@ -88,7 +97,9 @@ const setQuotationName = function (e) {
 }
 
 const quotationSearch = function (e) {
-  this.queryQuotationList(0)
+  let list = []
+  this.setData({ list })
+  this.queryQuotationList(1)
 }
 
 // const beforeShare = function () {
@@ -106,12 +117,10 @@ const onShareAppMessage = function () {
 }
 
 const loadQuotation = function () {
-  let page = this.data.page
-  let maxPage = this.data.maxPage
-  if (page + 1 >= maxPage) {
-    return
+  let showLoading = this.data.showLoading
+  if (showLoading) {
+    this.queryQuotationList()
   }
-  this.queryQuotationList(page + 1)
 }
 
 const toAuthorization = function () {

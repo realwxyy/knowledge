@@ -100,4 +100,5 @@ page {
 
 .share-wechat-button {
   border: none !important;
+  background: none !important;
 }

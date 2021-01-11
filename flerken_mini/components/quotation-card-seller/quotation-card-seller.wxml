@@ -9,8 +9,9 @@
     </view>
   </view>
   <view class="main-info">
-    <view class="name">{{quotation.name}}</view>
+    <view class="name"><span class="name-span">{{quotation.name}}</span></view>
     <view class="tag"></view>
+    <view class="desc"><span class="desc-span">{{quotation.description}}</span></view>
     <view class="date">{{quotation.create_date}}</view>
   </view>
   <view class="button-area"></view>
