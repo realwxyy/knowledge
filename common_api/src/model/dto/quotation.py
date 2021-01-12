@@ -13,7 +13,6 @@ class Quotation(db.Model):
     short_name = db.Column(db.String(64))
     main_img = db.Column(db.String(64))
     banner = db.Column(db.String(64))
-    tag = db.Column(db.String(64))
     description = db.Column(db.String(64))
     material_link = db.Column(db.String(64))
     sort = db.Column(db.Integer())
@@ -31,7 +30,6 @@ class Quotation(db.Model):
             'short_name': self.short_name,
             'main_img': self.main_img,
             'banner': self.banner,
-            'tag': self.tag,
             'description': self.description,
             'material_link': self.material_link,
             'sort': self.sort,
@@ -64,7 +62,6 @@ class QuotationSchema(ModelSchema):
     short_name = fields.String()
     main_img = fields.String()
     banner = fields.String()
-    tag = fields.String()
     description = fields.String()
     material_link = fields.String()
     sort = fields.Number()

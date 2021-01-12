@@ -48,10 +48,30 @@ def quotation_put():
     params = utils.get_params(request)
     req_quotation = params.get('quotation')
     req_products = params.get('products')
+    tags = req_quotation.get('tags')
+    if tags:
+        del req_quotation['tags']  # 该种方法是否合规 不合规请一律修改为（处理参数）
     validate_resp = utils.validate_dict_not_empty_with_key(req_quotation, CONS_CONTROLLER.QUOTATION_PUT_PARAMS)
     if validate_resp.get('code') == 0:
         req_quotation.update({CONS_COMMON.UPDATE_DATE: utils.if_empty_give_now_date()})
         quotation_service.save_quotation(req_quotation)
+        if tags:
+            if len(tags) > 0:
+                tags_req = []
+                for tag in tags:
+                    item = {}
+                    item.update({'quotation_id': req_quotation.get('id')})
+                    item.update({'tag_id': int(tag.get('tag_id'))})
+                    item = utils.assign_post_fields(item)
+                    tags_req.append(item)
+                quotation_service.del_tags(req_quotation)
+                quotation_service.save_quotation_tag(tags_req)
+        # 删除所有产品 再添加用户传过来的产品集合（该方式性能问题严重！）
+        if req_products and len(req_products) > 0:
+            for item in req_products:
+                item.update({'quotation_id': req_quotation.get('id')})
+                item = utils.assign_post_fields(item)
+        quotation_service.del_products(req_quotation)
         quotation_service.save_quotation_product(req_products)
         return resp.resp_succ(message='修改成功')
     else:

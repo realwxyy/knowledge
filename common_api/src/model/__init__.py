@@ -8,6 +8,7 @@ from src.model.dto.product import Product, ProductSchema
 from src.model.dto.quotation import Quotation, QuotationSchema
 from src.model.dto.quotation_product import QuotationProduct, QuotationProductSchema
 from src.model.dto.wechat_user import WechatUser, WechatUserSchema
+from src.model.dto.quotation_tag import QuotationTag, QuotationTagSchema
 
 # popo
 from src.model.popo.code2session import Code2Session

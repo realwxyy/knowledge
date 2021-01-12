@@ -1,7 +1,9 @@
 from sqlalchemy import or_, and_
 from src.model import Quotation, QuotationSchema
 from src.model import QuotationProduct, QuotationProductSchema
+from src.model import QuotationTag, QuotationTagSchema
 from src.utils import db
+from . import quotation_tag_service
 import time
 
 
@@ -57,6 +59,40 @@ def save_quotation_product(params):
     quotation_product = quotation_product_schema.load(params, session=db.session, many=True)
     db.session.bulk_save_objects(quotation_product)
     db.session.commit()
+
+
+def save_quotation_tag(params):
+    '''
+    @ description save quotation's tag
+    @ param dict of added quotation tags
+    @ param_type dict
+    @ return None
+    @ return_type None
+    '''
+    quotation_tag_schema = QuotationTagSchema()
+    quotation_tags = quotation_tag_schema.load(params, session=db.session, many=True)
+    db.session.bulk_save_objects(quotation_tags)
+    db.session.commit()
+
+
+def del_tags(params):
+    '''
+    @ description delete quotation's tags (only save)
+    @ param dict of quotation (only needed id of quotation)
+    @ param_type dict
+    @ return None
+    @ return_type None
+    '''
+    id = int(params.get('id'))
+    condition = (and_(QuotationTag.is_delete >= 0))
+    condition = and_(condition, QuotationTag.quotation_id == id)
+    quotation_tags = QuotationTag.query.filter(*condition)
+    for item in quotation_tags:
+        item.is_delete = -1
+        item.update_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    db.session.bulk_save_objects(quotation_tags)
+    db.session.commit()
+    pass
 
 
 def del_products(params):
@@ -115,7 +151,10 @@ def mini_queryList(params):
         total = Quotation.query.filter(*condition).count()
     sql_res = Quotation.query.filter(*condition)
     list = sql_res.paginate(page=page, per_page=size, error_out=False).items
-    return {'list': quotation_schema.dump(list), 'total': total}
+    quotation_list = quotation_schema.dump(list)
+    for q in quotation_list:
+        q.update({'tags': quotation_tag_service.query_tags_id_by_quotation_id(q.get('id'))})
+    return {'list': quotation_list, 'total': total}
 
 
 def admin_list(params):

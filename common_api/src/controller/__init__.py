@@ -5,7 +5,7 @@ from src.controller.role.role_controller import gl_role
 from src.controller.tag_controller import gl_tag
 from src.controller.brand.brand_controller import gl_brand
 from src.controller.product.product_controller import gl_product
-from src.controller.quotation.quotation_controller import gl_quotation
+from src.controller.quotation_controller import gl_quotation
 
 def resgister_all_bluePrint(app):
   app.register_blueprint(gl_user)
