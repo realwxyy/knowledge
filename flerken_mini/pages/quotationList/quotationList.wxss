@@ -28,6 +28,10 @@ page {
   font-size: 24rpx !important;
 }
 
+.quotation-scroll-view {
+  height: calc(100% - 105px);
+}
+
 .loading {
   display: flex;
   height: 80rpx;

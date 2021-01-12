@@ -6,6 +6,7 @@
 	"setting": {
 		"urlCheck": false,
 		"es6": true,
+		"enhance": true,
 		"postcss": true,
 		"preloadBackgroundData": false,
 		"minified": true,
@@ -23,7 +24,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": false,
 		"packNpmManually": true,
 		"packNpmRelationList": [
@@ -31,8 +32,7 @@
 				"packageJsonPath": "./package.json",
 				"miniprogramNpmDistDir": "./miniprogram/"
 			}
-		],
-		"enhance": true
+		]
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.14.0",

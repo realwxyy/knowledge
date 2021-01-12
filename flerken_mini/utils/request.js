@@ -68,6 +68,7 @@ const handleError = res => {
     removeStorageSync('wechat_third_session')
     removeStorageSync('wechatUserInfo')
     removeStorageSync('userInfo')
+    removeStorageSync('grant')
     // reLogin()
     wxLogin(wxLoginSucc, wxLoginFail)
   }

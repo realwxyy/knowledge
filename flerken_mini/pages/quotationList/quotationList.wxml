@@ -9,7 +9,7 @@
       <van-button custom-class="login-button" plain color="#ea9920" bind:tap="toAuthorization">登录</van-button>
     </van-empty>
   </view>
-  <scroll-view wx:else scroll-y="true" style="height: 1028rpx;" bindscrolltolower="loadQuotation">
+  <scroll-view class="quotation-scroll-view" wx:else scroll-y="true" bindscrolltolower="loadQuotation">
     <block wx:for="{{list}}" wx:for-item="item" wx:key="i" wx:for-index="i">
       <quotation-card-seller quotation="{{item}}" bindchooseQuotation="chooseQuotation" />
     </block>
