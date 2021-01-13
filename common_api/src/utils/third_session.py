@@ -37,7 +37,7 @@ def gen_3rdsession(params):
     # 过期时间为 60s * 60m * 24h * 30d
     # .decode("ascii")必加 一下午就解决这个 bug 了 不然是 byte 类型 jsonify 方法无法转换byte类型
     # s = Serializer(current_app.config['SECRET_KEY'], 60 * 60 * 24 * 31)
-    s = Serializer(current_app.config['SECRET_KEY'], 60 * 60)
+    s = Serializer(current_app.config['SECRET_KEY'], 60)
     third_session = s.dumps(params).decode("ascii")
     return third_session
 

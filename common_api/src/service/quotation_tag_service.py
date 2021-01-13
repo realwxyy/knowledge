@@ -17,8 +17,6 @@ def query_tags_id_by_quotation_id(id):
     condition.append(Tag.is_delete >= 0)
     # tags_id = QuotationTag.query.filter(*condition).all()
     data = db.session.query(Tag.name).filter(*condition).all()
-    tag_schema = TagSchema(many=True)
-
     tags = []
     for t in data:
         tags.append(t.name)
