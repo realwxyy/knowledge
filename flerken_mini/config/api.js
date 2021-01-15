@@ -11,3 +11,5 @@ export const getUsers = 'user/get_users'
 export const quotationUrl = 'quotation/mini_list'
 
 export const backUser = 'wechat/get_user'
+
+export const api_code2session = 'user/code2session'

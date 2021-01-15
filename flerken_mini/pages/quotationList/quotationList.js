@@ -14,7 +14,7 @@ const data = {
   maxPage: 1,
   loading: true,
   showLoading: true,
-  grant: false
+  grant: ''
 }
 
 const onLoad = function () { }
@@ -24,10 +24,11 @@ const onShow = function () {
   // grant undefined 执行查询
   // grant true 执行查询
   // grant false 不执行
-  if (!(getStorageSync('grant') === false)) {
+  let grant = getStorageSync('grant')
+  if (grant) {
     this.queryQuotationList()
   }
-  this.setData({ grant: getStorageSync('grant') })
+  this.setData({ grant })
 }
 
 const inialData = function () {
@@ -98,7 +99,9 @@ const setQuotationName = function (e) {
 
 const quotationSearch = function (e) {
   let list = []
-  this.setData({ list })
+  let loading = true
+  let showLoading = true
+  this.setData({ list, showLoading, loading })
   this.queryQuotationList(1)
 }
 

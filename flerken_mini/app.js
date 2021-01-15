@@ -1,6 +1,10 @@
-const onLaunch = () => {}
+import { checkThirdSession } from './utils/util'
+import { wxRelaunch, wxLoginSync } from './utils/common'
+import { page_quotationList, page_authorization } from './config/page'
 
-const onShow = opt => {}
+const onLaunch = () => { }
+
+const onShow = opt => {  }
 
 const globalData = { userInfo: null }
 

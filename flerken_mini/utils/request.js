@@ -11,10 +11,10 @@ const wxLoginSucc = async res => {
   let { code } = res
   const data = await code2session({ code, appid })
   console.log(data)
-  if(data.code === 0) {
+  if (data.code === 0) {
     setStorageSync('wechat_third_session', data.data.third_session)
-    login()
   }
+  login()
   // .then(res => {
   //   console.log(res)
   //   if (res.code === 0) {
@@ -39,10 +39,9 @@ export const login = () => {
         wxRelaunch(page_quotationList)
       }
     })
-  } 
-  // else {
-  //   wxNavigateTo(page_authorization)
-  // }
+  } else {
+    wxNavigateTo(page_authorization)
+  }
 }
 
 const reLogin = () => {
@@ -64,13 +63,15 @@ const reLogin = () => {
  */
 const handleError = res => {
   if (res.code === -1) {
+    console.log('进入重新登录逻辑')
     // 重新登录逻辑
     removeStorageSync('wechat_third_session')
     removeStorageSync('wechatUserInfo')
     removeStorageSync('userInfo')
-    removeStorageSync('grant')
-    // reLogin()
-    wxLogin(wxLoginSucc, wxLoginFail)
+    // removeStorageSync('grant')
+    setStorageSync('grant', false)
+    reLogin()
+    // wxLogin(wxLoginSucc, wxLoginFail)
   }
 }
 
@@ -133,4 +134,4 @@ const postRequest = (url, data, header = _header) => {
   return reqeust(url, data, header, 'POST')
 }
 
-export { getRequest, deleteRequest, putRequest, postRequest }
+export { getRequest, deleteRequest, putRequest, postRequest, reLogin }

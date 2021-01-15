@@ -5,4 +5,5 @@ export const getStorageSync = key => wx.getStorageSync(key)
 export const removeStorageSync = key => wx.removeStorageSync(key)
 export const getStorageInfoSync = () => wx.getStorageInfoSync()
 export const wxRelaunch = url => wx.reLaunch({ url })
-export const wxNavigateTo = url => wx.navigateTo({ url });
+export const wxNavigateTo = url => wx.navigateTo({ url })
+export const wxLoginSync = () => { return new Promise((resolve, reject) => { wx.login({ success: res => { resolve(res) }, fail: err => { reject(err) } }) }) }

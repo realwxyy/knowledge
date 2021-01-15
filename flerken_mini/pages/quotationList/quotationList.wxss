@@ -1,11 +1,12 @@
 page {
   height: 100%;
+  box-sizing: border-box;
+  border-top: 1rpx solid #eee;
 }
 
 .log-list {
   display: flex;
   flex-direction: column;
-  border-top: 1rpx solid #eee;
   background-color: #f1f1f1;
   height: 100%;
 }

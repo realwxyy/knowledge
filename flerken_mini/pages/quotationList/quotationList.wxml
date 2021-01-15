@@ -4,7 +4,7 @@
     placeholder="请输入报价单名称">
     <view slot="action" bind:tap="quotationSearch" class="search-text">搜索</view>
   </van-search>
-  <view wx:if="{{!grant}}" class="login-tip" style="height:100%;background:#fff;">
+  <view wx:if="{{grant === false}}" class="login-tip" style="height:100%;background:#fff;">
     <van-empty description="登录后可查看所拥有的报价单">
       <van-button custom-class="login-button" plain color="#ea9920" bind:tap="toAuthorization">登录</van-button>
     </van-empty>

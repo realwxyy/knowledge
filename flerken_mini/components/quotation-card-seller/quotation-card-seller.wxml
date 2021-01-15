@@ -10,7 +10,13 @@
   </view>
   <view class="main-info">
     <view class="name"><span class="name-span">{{quotation.name}}</span></view>
-    <view class="tag"></view>
+    <scroll-view class="tag-scroll-view" scroll-x="true">
+      <van-tag wx:for="{{ quotation.tags }}" wx:for-item="item" wx:key="i" wx:for-index="i" class="tag-main" plain color="#AAAAAA">{{
+        item }}</van-tag>
+    </scroll-view>
+    <!-- <view class="tag">
+      
+    </view> -->
     <view class="desc"><span class="desc-span">{{quotation.description}}</span></view>
     <view class="date">{{quotation.create_date}}</view>
   </view>

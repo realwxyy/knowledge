@@ -1,30 +1,32 @@
 // authorization.js
 import { setStorageSync, getStorageSync, wxRelaunch } from '../../utils/common'
+import { getLoginCode, setThirdSession } from '../../utils/util'
 import { page_quotationList } from '../../config/page'
-import { login } from '../../utils/request'
+import { reLogin } from '../../utils/request'
 import { queryAllUser } from '../../api/quotation'
 
 const data = {}
 
 const onLoad = () => { }
 
-const onShow = () => { }
+const onShow = () => {
+  let thirdSession = getStorageSync('wechat_third_session')
+  if (!thirdSession) {
+    setThirdSession()
+  }
+}
 
 const getUserInfo = res => {
   let { userInfo } = res.detail
-  console.log(userInfo)
   if (userInfo) {
     userInfo.avatar = userInfo.avatarUrl
-    console.log(userInfo)
     setStorageSync('wechatUserInfo', userInfo)
     setStorageSync('grant', true)
-    login()
   } else {
     console.log('需要授权才能查看报价单等信息')
     setStorageSync('grant', false)
-    wxRelaunch(page_quotationList)
-    
   }
+  wxRelaunch(page_quotationList)
 }
 
 const getUsers = res => {
