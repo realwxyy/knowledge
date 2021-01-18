@@ -2,8 +2,10 @@ from sqlalchemy import or_, and_
 from src.model import Quotation, QuotationSchema
 from src.model import QuotationProduct, QuotationProductSchema
 from src.model import QuotationTag, QuotationTagSchema
+from src.model import BrandSchema
 from src.utils import db
 from . import quotation_tag_service
+from . import brand_service
 import time
 
 
@@ -143,7 +145,7 @@ def mini_queryList(params):
     name = params.get('name')
     page = int(params.get('page'))
     size = int(params.get('size'))
-    quotation_schema = QuotationSchema(many=True, only=['id', 'main_img', 'name', 'short_name', 'description', 'create_date'])
+    quotation_schema = QuotationSchema(many=True, only=['id', 'brand_id', 'main_img', 'name', 'short_name', 'description', 'create_date'])
     condition = [Quotation.is_delete >= 0]
     total = Quotation.query.filter(*condition).count()
     if name:
@@ -154,6 +156,8 @@ def mini_queryList(params):
     quotation_list = quotation_schema.dump(list)
     for q in quotation_list:
         q.update({'tags': quotation_tag_service.query_tags_id_by_quotation_id(q.get('id'))})
+        brand_dict = brand_service.query_brand_by_id(q.get('brand_id'))
+        q.update({'brandName': brand_dict.get('zh_name')})
     return {'list': quotation_list, 'total': total}
 
 

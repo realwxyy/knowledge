@@ -8,6 +8,7 @@ class Quotation(db.Model):
     __tablename__ = 'quotation'
     # 定义字段
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    brand_id= db.Column(db.Integer())
     code = db.Column(db.String())
     name = db.Column(db.String(64))
     short_name = db.Column(db.String(64))
@@ -25,6 +26,7 @@ class Quotation(db.Model):
     def get_schema(self):
         return {
             'id': self.id,
+            'brand_id': self.brand_id,
             'code': self.code,
             'name': self.name,
             'short_name': self.short_name,
@@ -57,6 +59,7 @@ class QuotationSchema(ModelSchema):
         # sqla_session = db.session
 
     id = fields.Number()
+    brand_id = fields.Number()
     code = fields.String()
     name = fields.String()
     short_name = fields.String()
