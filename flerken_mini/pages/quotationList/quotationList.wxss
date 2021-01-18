@@ -33,6 +33,10 @@ page {
   height: calc(100% - 105px);
 }
 
+.quotation-tabbar {
+  border-top: 1rpx solid #eee;
+}
+
 .loading {
   display: flex;
   height: 80rpx;

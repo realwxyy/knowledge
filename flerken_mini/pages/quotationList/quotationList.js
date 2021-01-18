@@ -116,7 +116,18 @@ const onShareAppMessage = function () {
   let list = this.data.list
   list = list.filter(o => o.checked)
   this.setData({ list })
-  return { title: '测试', path: '测试' }
+  let title = "";
+  let brandName = list[0].brandName
+  let num = list.length
+  let path = `/pages/quotationList/quotationList`
+  let ids = []
+  ids = list.map(o => o.id)
+  if (num > 1) {
+    title = brandName + "等" + num + "个报价单";
+  } else {
+    title = brandName + "1个报价单";
+  }
+  return { title, path }
 }
 
 const loadQuotation = function () {
