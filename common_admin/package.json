@@ -23,8 +23,8 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "s": "react-app-rewired start",
+    "b": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
   },

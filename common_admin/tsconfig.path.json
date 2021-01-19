@@ -1,11 +1,15 @@
 {
-  "compilerOptions": {
-      "baseUrl": "src",
-      "paths": {
-        "@/*": ["src/*"],
-        "@components/*": ["src/components/*"],
-        "@views/*": ["src/views/*"],
-        "@utils/*": ["src/utils/*"]
-      }
-  }
+  // "compilerOptions": {
+  //   "baseUrl": "src",
+  //   "paths": {
+  //     "@/*": ["src/*"],
+  //     "@/css/*": ["src/assets/styles/css/*"],
+  //     "@/sass/*": ["src/assets/styles/sass/*"],
+  //     "@/less/*": ["src/assets/styles/less/*"],
+  //     "@components/*": ["src/components/*"],
+  //     "@views/*": ["src/views/*"],
+  //     "@utils/*": ["src/utils/*"]
+  //   }
+  // }
 }
+//暂时没发现用处

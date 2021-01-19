@@ -3,7 +3,10 @@ const { override, addWebpackAlias, addLessLoader, fixBabelImports } = require("c
 
 module.exports = override(
   addWebpackAlias({
-    "@": path.resolve(__dirname, 'src')
+    "@": path.resolve(__dirname, 'src'),
+    "@css": path.resolve(__dirname, 'src/assets/styles/css'),
+    "@svg": path.resolve(__dirname, 'src/assets/image/svg'),
+    "@utils": path.resolve(__dirname, 'src/utils')
   }),
   addLessLoader({
     javascriptEnabled: true,
