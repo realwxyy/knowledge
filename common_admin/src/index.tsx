@@ -2,11 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "@css/index.css";
 import App from "./App";
+import { HashRouter } from "react-router-dom";
+import { ConfigProvider } from "antd";
+import zhCN from "antd/es/locale/zh_CN";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <HashRouter>
+    <ConfigProvider locale={zhCN}>
+      <App />
+    </ConfigProvider>
+  </HashRouter>,
   document.getElementById("root")
 );
 
