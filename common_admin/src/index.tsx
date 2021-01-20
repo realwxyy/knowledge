@@ -7,7 +7,6 @@ import { ConfigProvider } from 'antd'
 import App from './views/App'
 import store, { persistor } from './redux/store'
 import zhCN from 'antd/es/locale/zh_CN'
-import 'antd/dist/antd.css'
 import '@css/index.css'
 
 ReactDOM.render(

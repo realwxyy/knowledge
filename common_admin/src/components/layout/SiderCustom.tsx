@@ -82,7 +82,7 @@ const SiderCustome = (props: any) => {
       }}
       theme="light"
     >
-      <div className="sider-menu-item-logo">common_admin</div>
+      <div className="sider-menu-item-logo">admin</div>
       <Menu
         mode="inline"
         theme="light"

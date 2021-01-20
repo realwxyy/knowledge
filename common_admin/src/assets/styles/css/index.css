@@ -1,4 +1,5 @@
-@import "~antd/dist/antd.css";
+/* @import "~antd/dist/antd.css"; */
+/* 改为按需加载 不要使用css css已经编译好 里面都是默认蓝色主题~ */
 
 body {
   margin: 0;

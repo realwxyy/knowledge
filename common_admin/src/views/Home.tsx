@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Button } from 'antd'
 import { increment } from '@/redux/store/actions'
 
 const Home: FC = () => {
@@ -7,14 +8,16 @@ const Home: FC = () => {
   const test = useSelector((state) => state)
   console.log(test)
   const f: any = () => {
-    dispatch({ type: 'INCREMENT' })
+    dispatch(increment())
     console.log(test)
   }
   console.log(test)
   // dispatch(increment())
   return (
     <div>
-      <button onClick={f}></button>
+      <Button type="primary" onClick={f}>
+        按钮
+      </Button>
     </div>
   )
 }
