@@ -3,24 +3,13 @@
     "baseUrl": "src",
     "paths": {
       // 重要： 此处只配置src下的一级文件夹 多级文件夹配置转config-overrides中配置
-      "@/*": [
-        "*"
-      ],
-      "@assets/*": [
-        "assets/*"
-      ],
-      "@components/*": [
-        "components/*"
-      ],
-      "@routes/*": [
-        "routes/*"
-      ],
-      "@views/*": [
-        "views/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ]
+      // 改文件有的 config-overrides 必须要有 两文件最好同步更改
+      "@/*": ["*"],
+      "@assets/*": ["assets/*"],
+      "@components/*": ["components/*"],
+      "@routes/*": ["routes/*"],
+      "@views/*": ["views/*"],
+      "@utils/*": ["utils/*"]
     }
   }
 }

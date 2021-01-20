@@ -1,10 +1,10 @@
-import React from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
-import { getAllRoute } from "@routes/index";
-import AllComponents from "@/views/index";
+import React from 'react'
+import { Switch, Route, withRouter } from 'react-router-dom'
+import { getAllRoute } from '@routes/index'
+import AllComponents from '@/views/index'
 
 const ContentCustom = (props: any) => {
-  const routers = getAllRoute();
+  const routers = getAllRoute()
 
   return (
     <div style={{ minHeight: 280 }}>
@@ -16,11 +16,11 @@ const ContentCustom = (props: any) => {
               key={item.path}
               component={AllComponents[item.component]}
             />
-          ) : null;
+          ) : null
         })}
       </Switch>
     </div>
-  );
-};
+  )
+}
 
-export default withRouter(ContentCustom);
+export default withRouter(ContentCustom)

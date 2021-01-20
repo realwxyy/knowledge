@@ -3,19 +3,31 @@
  */
 
 import routers from './router'
-import { PieChartOutlined, BarChartOutlined, AppstoreOutlined, OrderedListOutlined, UserOutlined, MoneyCollectOutlined, CarOutlined, MenuOutlined, TrademarkOutlined } from '@ant-design/icons';
+import {
+  PieChartOutlined,
+  BarChartOutlined,
+  AppstoreOutlined,
+  OrderedListOutlined,
+  UserOutlined,
+  MoneyCollectOutlined,
+  CarOutlined,
+  MenuOutlined,
+  TrademarkOutlined,
+} from '@ant-design/icons'
 
 export const routerConfig = () => {
-  return routers;
+  return routers
 }
 
 export const handleJoinPath = (router: any, path: any, role: any) => {
-  router.children && router.children.forEach((item: any) => {
-    handleJoinPath(item, path + item.key, role)
-  })
+  router.children &&
+    router.children.forEach((item: any) => {
+      handleJoinPath(item, path + item.key, role)
+    })
   router.accessFlag = true
   if (router.access) {
-    if (router.access.indexOf(role) === -1) {  // 有权限
+    if (router.access.indexOf(role) === -1) {
+      // 有权限
       router.accessFlag = false
     }
   }
@@ -23,12 +35,12 @@ export const handleJoinPath = (router: any, path: any, role: any) => {
 }
 
 export const filterLayout = (type: any) => {
-  let router;
+  let router
   for (let i = 0; i < routerConfig().length; i++) {
-    const item: any = routerConfig()[i];
+    const item: any = routerConfig()[i]
     if (item.layout === type) {
       router = item
-      break;
+      break
     }
   }
   return router
@@ -40,7 +52,7 @@ export const getAllRoute = (role: any = '') => {
   routerConfig().forEach((item: any) => {
     if (item.layout) {
       handleJoinPath(item, item.key, role)
-      layout_list.push(item);
+      layout_list.push(item)
     }
   })
 
@@ -57,7 +69,7 @@ export const getAllRoute = (role: any = '') => {
 
 export const getRoute = (routes: any, list: any) => {
   for (const k in routes) {
-    const item = routes[k];
+    const item = routes[k]
     if (item.children) {
       getRoute(item.children, list)
     } else {
@@ -69,23 +81,22 @@ export const getRoute = (routes: any, list: any) => {
 
 export const getIcon = (icon: any) => {
   if (icon === 'PieChartOutlined') {
-    return PieChartOutlined;
+    return PieChartOutlined
   } else if (icon === 'BarChartOutlined') {
-    return BarChartOutlined;
+    return BarChartOutlined
   } else if (icon === 'AppstoreOutlined') {
-    return AppstoreOutlined;
+    return AppstoreOutlined
   } else if (icon === 'OrderedListOutlined') {
-    return OrderedListOutlined;
+    return OrderedListOutlined
   } else if (icon === 'UserOutlined') {
-    return UserOutlined;
+    return UserOutlined
   } else if (icon === 'MoneyCollectOutlined') {
-    return MoneyCollectOutlined;
+    return MoneyCollectOutlined
   } else if (icon === 'CarOutlined') {
-    return CarOutlined;
+    return CarOutlined
   } else if (icon === 'MenuOutlined') {
-    return MenuOutlined;
+    return MenuOutlined
   } else if (icon === 'TrademarkOutlined') {
-    return TrademarkOutlined;
+    return TrademarkOutlined
   }
 }
-

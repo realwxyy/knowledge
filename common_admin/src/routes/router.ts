@@ -5,7 +5,7 @@
  */
 
 /*********************** 后台页面 ************************ */
-import { PieChartOutlined, BarChartOutlined } from '@ant-design/icons';
+import { PieChartOutlined, BarChartOutlined } from '@ant-design/icons'
 const router: Array<object> = [
   {
     key: '/admin',
@@ -29,29 +29,35 @@ const router: Array<object> = [
         title: '文章',
         children: [
           { key: '/index', title: '文章管理', component: 'Article' },
-          { key: '/editArticle/:id?', title: '编辑文章', component: 'EditArticle', hideInMenu: true },
-        ]
+          {
+            key: '/editArticle/:id?',
+            title: '编辑文章',
+            component: 'EditArticle',
+            hideInMenu: true,
+          },
+        ],
       },
       {
         key: '/component',
         icon: BarChartOutlined,
         title: '组件',
         children: [
-          { key: '/index', title: '组件管理', component: 'Component' }
-        ]
+          { key: '/index', title: '组件管理', component: 'Component' },
+        ],
       },
       {
         key: '/500',
         title: 'error_500',
         hideInMenu: true,
-        component: 'Exception500'
+        component: 'Exception500',
       },
       {
         key: '/404',
         title: 'error_404',
         hideInMenu: true,
-        component: 'Exception404'
-      }
-    ]
-  }]
+        component: 'Exception404',
+      },
+    ],
+  },
+]
 export default router

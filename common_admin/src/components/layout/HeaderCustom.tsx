@@ -1,11 +1,11 @@
-import React from "react";
-import { Layout } from "antd";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import React from 'react'
+import { Layout } from 'antd'
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons'
 
-const { Header } = Layout;
+const { Header } = Layout
 
 const HeaderCustom = (props: any) => {
-  const { collapsed, toggle } = props;
+  const { collapsed, toggle } = props
 
   return (
     <Header
@@ -16,7 +16,7 @@ const HeaderCustom = (props: any) => {
         {React.createElement(
           collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
           {
-            className: "trigger",
+            className: 'trigger',
             onClick: toggle,
           }
         )}
@@ -29,7 +29,7 @@ const HeaderCustom = (props: any) => {
         </div>
       </div>
     </Header>
-  );
-};
+  )
+}
 
-export default HeaderCustom;
+export default HeaderCustom
