@@ -6,13 +6,16 @@ from src.controller.tag_controller import gl_tag
 from src.controller.brand_controller import gl_brand
 from src.controller.product.product_controller import gl_product
 from src.controller.quotation_controller import gl_quotation
+from src.controller.admin_user_controller import gl_admin_user
+
 
 def resgister_all_bluePrint(app):
-  app.register_blueprint(gl_user)
-  app.register_blueprint(gl_token)
-  app.register_blueprint(gl_wechat)
-  app.register_blueprint(gl_role)
-  app.register_blueprint(gl_tag)
-  app.register_blueprint(gl_brand)
-  app.register_blueprint(gl_product)
-  app.register_blueprint(gl_quotation)
+    app.register_blueprint(gl_user)
+    app.register_blueprint(gl_token)
+    app.register_blueprint(gl_wechat)
+    app.register_blueprint(gl_role)
+    app.register_blueprint(gl_tag)
+    app.register_blueprint(gl_brand)
+    app.register_blueprint(gl_product)
+    app.register_blueprint(gl_quotation)
+    app.register_blueprint(gl_admin_user)

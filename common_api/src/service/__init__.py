@@ -8,6 +8,7 @@ import src.service.brand_service as brand_service
 import src.service.product.product_service as product_service
 import src.service.quotation_service as quotation_service
 import src.service.wechat.wechat_service as wechat_service
+import src.service.admin_user_service as admin_user_service
 
 # third
 import src.service.quotation_tag_service as quotation_tag_service
