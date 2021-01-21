@@ -14,7 +14,6 @@ class AdminUser(db.Model):
     nickname = db.Column(db.String(64))
     phone = db.Column(db.String(64))
     role_id = db.Column(db.Integer)
-    status = db.Column(db.Integer)
     create_date = db.Column(db.DateTime(10))
     update_date = db.Column(db.DateTime(10))
     is_delete = db.Column(db.Integer())
@@ -28,7 +27,6 @@ class AdminUser(db.Model):
             'nickname': self.nickname,
             'phone': self.phone,
             'role_id': self.role_id,
-            'status': self.status,
             'create_date': self.create_date,
             'update_date': self.update_date,
             'is_delete': self.is_delete,
@@ -63,7 +61,6 @@ class AdminUserSchema(ModelSchema):
     nickname = fields.String()
     phone = fields.String()
     role_id = fields.Number()
-    status = fields.String()
     create_date = fields.String()
     update_date = fields.String()
     is_delete = fields.Number()

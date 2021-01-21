@@ -9,6 +9,12 @@ def query_admin_user_by_name(name):
     return admin_user_schema.dump(admin_user)
 
 
+def query_admin_user_entity_by_name(name):
+    admin_user_schema = AdminUserSchema(many=True)
+    admin_user = AdminUser.query.filter(AdminUser.name == name).filter(AdminUser.is_delete >= 0).first()
+    return admin_user
+
+
 def query_admin_user_by_id(id):
     admin_user_schema = AdminUserSchema()
     admin_user = AdminUser.query.get(id)
@@ -19,6 +25,10 @@ def save_admin_user(params):
     admin_user_schema = AdminUserSchema()
     admin_user = admin_user_schema.load(params, session=db.session)
     return admin_user_schema.dump(admin_user.save())
+
+
+def check_admin_user_password(admin_user, password):
+    return admin_user.verify_password(password)
 
 
 def query_brand_by_name(name):
