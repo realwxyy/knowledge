@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Button } from 'antd'
-import { increment } from '@/redux/store/actions'
+import { increment } from '@/redux/actions'
 
 const Home: FC = () => {
   const dispatch = useDispatch()

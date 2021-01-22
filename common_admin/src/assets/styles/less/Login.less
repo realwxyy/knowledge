@@ -28,9 +28,18 @@
       margin: 0px auto;
       display: flex;
       flex-direction: column;
-      .login-input {
-        margin-top: 45px;
-        border-bottom: 1px solid #eee;
+      .login-name-container,
+      .login-password-container {
+        .login-input {
+          margin-top: 45px;
+          border-bottom: 1px solid #eee;
+        }
+      }
+      .name-error {
+        border-bottom: 1px solid #FF6666;
+        input::placeholder {
+          color: #f1403c !important;
+        }
       }
     }
     .login-button-area {
