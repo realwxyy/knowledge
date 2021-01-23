@@ -32,6 +32,11 @@ def before_request():
 
 @app.after_request
 def after_request(response, *args, **kwargs):
+    # 跨域配置
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    response.headers['Access-Control-Allow-Methods'] = 'GET,HEAD,OPTIONS,POST,PUT,DELETE'
+    response.headers['Access-Control-Allow-Headers'] = 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
     logger = get_logger()
     start_time = request.start_time
     now_time = time.time()
