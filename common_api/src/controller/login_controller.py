@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from src.utils import resp, utils
+from src.utils import resp, utils, token
 from src.service import admin_user_service, login_service
 
 gl_login = Blueprint('login', __name__, url_prefix='/login')
@@ -20,6 +20,7 @@ def login_post():
         resp_dict = login_service.login(params)
         if resp_dict.get('code') == 0:
             admin_resp = resp_dict.get('data')
+            admin_resp.update({'token': token.gen_token(admin_resp)})
             return resp.resp_succ(admin_resp, '登录成功')
         else:
             return resp.resp_fail({}, resp_dict.get('msg'))
