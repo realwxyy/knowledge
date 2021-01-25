@@ -20,14 +20,14 @@ const Test2 = (state = 0, action: ModifyAction): number => {
 }
 
 // common-token
-const token = (state = {}, action: any) => {
+const token = (state = '', action: any) => {
   switch (action.type) {
     case SET_TOKEN:
-      return { ...state, ...{ token: action.token } }
+      return action.token
     case CLEAR_TOKEN:
-      return { ...state, ...{ token: '' } }
+      return ''
     default:
-      return null
+      return state
   }
 }
 

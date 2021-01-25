@@ -17,33 +17,17 @@ const router: Array<object> = [
         title: '主页',
         component: 'Home',
       },
-      // {
-      //   key: '/materialLibrary',
-      //   icon: PieChartOutlined,
-      //   title: '主页',
-      //   component: 'MaterialLibrary',
-      // },
       {
-        key: '/article',
-        icon: BarChartOutlined,
-        title: '文章',
-        children: [
-          { key: '/index', title: '文章管理', component: 'Article' },
-          {
-            key: '/editArticle/:id?',
-            title: '编辑文章',
-            component: 'EditArticle',
-            hideInMenu: true,
-          },
-        ],
+        key: '/brand',
+        icon: PieChartOutlined,
+        title: '品牌',
+        component: 'Brand',
       },
       {
-        key: '/component',
+        key: '/product',
         icon: BarChartOutlined,
-        title: '组件',
-        children: [
-          { key: '/index', title: '组件管理', component: 'Component' },
-        ],
+        title: '商品',
+        component: 'ProductList'
       },
       {
         key: '/500',

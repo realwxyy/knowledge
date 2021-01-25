@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { message } from 'antd'
 import { requestConfig } from '@config/path'
+import store from '@redux/store'
 
 let logoutCount = 0
 
@@ -18,9 +19,10 @@ service.interceptors.request.use(
     // config.headers['Access-Control-Allow-Headers'] = 'Authorization,Origin, X-Requested-With, Content-Type, Accept';
     // config.headers['Access-Control-Allow-Methods'] = 'GET,POST';
     // Add X-Access-Token header to every request, you can add other custom headers here
-    // if (UserModule.token) {
-    // config.headers['X-Access-Token'] = UserModule.token
-    // }
+    let storage: any = store.getState()
+    if (storage.token) {
+    config.headers['common-token'] = storage.token
+    }
     return config
   },
   (error: string) => {

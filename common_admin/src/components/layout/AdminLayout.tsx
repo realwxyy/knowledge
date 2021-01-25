@@ -9,7 +9,7 @@ import '@less/AdminLayout.less'
 const { Content } = Layout
 
 const AdminLayout: FC = () => {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState<boolean>(false)
   const toggle = () => setCollapsed(!collapsed)
   return (
     <Layout className="site-layout">

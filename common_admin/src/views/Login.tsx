@@ -1,12 +1,15 @@
-import React, { FC, ChangeEvent, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { FC, ChangeEvent, useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { Row, Col, Input, Button } from 'antd'
 import { login } from '@api/login'
-import { set_token } from '@redux/actions'
+import { set_token, set_user_info } from '@redux/actions'
 import '@less/Login.less'
 
 const Login: FC = () => {
-  const dispath = useDispatch()
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const token = useSelector((state: any) => state.token)
   const [name, setName] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [nameErr, setNameErr] = useState<boolean>(false)
@@ -52,10 +55,18 @@ const Login: FC = () => {
     login(param).then((res: any) => {
       console.log(res)
       if (res.code === 0) {
-        dispath(set_token(res.data.id))
+        dispatch(set_token(res.data.token))
+        dispatch(set_user_info(res.data))
       }
     })
   }
+
+  /**
+   * effect
+   */
+  useEffect(() => {
+    if (token) history.push('/admin/home')
+  }, [token, history])
 
   return (
     <>
