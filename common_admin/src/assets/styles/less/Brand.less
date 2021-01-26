@@ -1,9 +1,60 @@
 @import 'common.less';
 
-.right-item {
-  text-align: right;
+.operate-row {
+  min-width: 600px;
+  .right-item {
+    text-align: right;
+    .brand-input {
+      margin-right: 16px;
+      min-width: 100px;
+    }
+  }
 }
 
-.brand-input {
-  margin-right: 16px;
+// .table-row {
+//   min-width: 600px;
+// }
+
+.column_ID {
+  min-width: 80px;
+}
+
+.column_name {
+  min-width: 240px;
+}
+
+.column_code {
+  min-width: 140px;
+}
+
+.column_region {
+  min-width: 100px;
+}
+
+.column_about_brand {
+  min-width: 180px;
+}
+
+.column_serial_number {
+  min-width: 80px;
+}
+
+.about_brand {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  text-indent: 28px;
+  max-height: 100px;
+  height: 100px;
+  overflow: auto;
+}
+
+.pagination-row {
+  display: flex;
+  justify-content: flex-end;
+  min-width: 600px;
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+  }
 }

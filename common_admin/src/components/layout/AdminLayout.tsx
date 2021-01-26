@@ -12,7 +12,13 @@ const AdminLayout: FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const toggle = () => setCollapsed(!collapsed)
   return (
-    <Layout className="site-layout">
+    <Layout
+      className="site-layout"
+      style={{
+        overflow: 'auto',
+        height: '100vh',
+      }}
+    >
       <SiderCustom collapsed={collapsed} />
       <Layout>
         <HeaderCustom
@@ -22,7 +28,7 @@ const AdminLayout: FC = () => {
         />
         {/* <BreadcrumbCustom /> */}
         <Content style={{ margin: '16px', overflow: 'initial' }}>
-          <ContentCustom user={{}} />
+          <ContentCustom />
         </Content>
       </Layout>
     </Layout>

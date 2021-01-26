@@ -34,14 +34,7 @@ const SiderCustome = (props: any) => {
           </span>
         }
       >
-        {item.children &&
-          item.children.map((sub: any) =>
-            sub.children
-              ? renderSubMenu(sub)
-              : sub.hideInMenu || !sub.accessFlag
-              ? null
-              : renderMenuItem(sub)
-          )}
+        {item.children && item.children.map((sub: any) => (sub.children ? renderSubMenu(sub) : sub.hideInMenu || !sub.accessFlag ? null : renderMenuItem(sub)))}
       </SubMenu>
     )
   }
@@ -50,9 +43,7 @@ const SiderCustome = (props: any) => {
     return (
       <Menu.Item data-tset1={item.path} key={item.path}>
         <Link to={item.path}>
-          {item.icon ? (
-            <Icon component={item.icon} className="sider-menu-icon" />
-          ) : null}
+          {item.icon ? <Icon component={item.icon} className="sider-menu-icon" /> : null}
           <span>{item.title}</span>
         </Link>
       </Menu.Item>
@@ -83,21 +74,11 @@ const SiderCustome = (props: any) => {
       theme="light"
     >
       <div className="sider-menu-item-logo">admin</div>
-      <Menu
-        mode="inline"
-        theme="light"
-        defaultOpenKeys={openKey}
-        selectedKeys={selectKey}
-        onClick={(e) => handleClick(e)}
-      >
+      <Menu mode="inline" theme="light" defaultOpenKeys={openKey} selectedKeys={selectKey} onClick={(e) => handleClick(e)}>
         {routers &&
           routers.key &&
           routers.children.map((item: any) => {
-            return item.children
-              ? renderSubMenu(item)
-              : item.accessFlag && !item.hideInMenu
-              ? renderMenuItem(item)
-              : null
+            return item.children ? renderSubMenu(item) : item.accessFlag && !item.hideInMenu ? renderMenuItem(item) : null
           })}
       </Menu>
     </Sider>

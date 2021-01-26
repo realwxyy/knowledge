@@ -3,15 +3,14 @@ import { Switch, Route, withRouter, useHistory } from 'react-router-dom'
 import { getAllRoute } from '@routes/index'
 import AllComponents from '@/views/index'
 
-const ContentCustom = (props: any) => {
+const ContentCustom = () => {
   const history = useHistory()
   let { pathname } = history.location
   const routers = getAllRoute()
   let title = routers.filter((o: any) => pathname.includes(o.path))[0].title || '未定义'
-
   useEffect(() => {
     document.title = title
-  }, [title])
+  })
 
   return (
     <div style={{ minHeight: 280 }}>
