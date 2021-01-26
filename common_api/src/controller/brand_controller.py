@@ -72,6 +72,11 @@ def brand_delete():
         return resp.resp_fail({}, validate_resp.get(CONS_COMMON.MSG))
 
 
-@gl_brand.route('/brand', methods=['get'])
+@gl_brand.route('/admin_list', methods=['get'])
 def brand_get():
-    return resp.resp_succ({}, 'with developing....')
+    params = utils.get_params(request)
+    validate_resp = utils.validate_dict_not_empty_with_key(params, ['page', 'size'])
+    if validate_resp.get(CONS_COMMON.CODE) == 0:
+        return resp.resp_succ(brand_service.admin_list(params))
+    else:
+        return resp.resp_fail({}, validate_resp.get('msg'))

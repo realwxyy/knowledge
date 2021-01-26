@@ -1,3 +1,4 @@
+from sqlalchemy import or_, and_
 from src.model import Brand, BrandSchema
 from src.utils import db
 
@@ -35,3 +36,20 @@ def delete_brand(params):
 #     tag_schema = BrandSchema(many=True, only=['id', 'name'])
 #     tag = Brand.query.filter(Brand.is_delete >= 0).all()
 #     return tag_schema.dump(tag)
+
+
+def admin_list(params):
+    page = int(params.get('page'))
+    size = int(params.get('size'))
+    brandName = params.get('brandName')
+    brand_schema = BrandSchema(many=True)
+    total = 0
+    condition = Brand.is_delete >= 0
+    if brandName:
+        match1 = Brand.en_name.like('%' + brandName + '%')
+        match2 = Brand.zh_name.like('%' + brandName + '%')
+        condition = and_(condition, or_(match1, match2))
+    sql_res = Brand.query.filter(condition)
+    admin_list = sql_res.paginate(page=page, per_page=size, error_out=False).items
+    total = sql_res.count()
+    return {'list': brand_schema.dump(admin_list), 'total': total}
