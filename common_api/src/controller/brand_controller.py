@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from src.utils import resp, utils
+from src.utils import resp, utils, login_required
 from src.service import brand_service
 from src.constant import CONS_COMMON, CONS_CONTROLLER, CONS_REQ_METHOD, CONS_MSG
 
@@ -73,6 +73,7 @@ def brand_delete():
 
 
 @gl_brand.route('/admin_list', methods=['get'])
+@login_required
 def brand_get():
     params = utils.get_params(request)
     validate_resp = utils.validate_dict_not_empty_with_key(params, ['page', 'size'])

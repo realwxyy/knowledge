@@ -24,7 +24,7 @@ def login_required(view_func):
             s.loads(token)
         except Exception:
             # return jsonify(code=4101, msg="登录已过期")
-            return resp.resp_fail({}, '登录已过期')
+            return resp.resp_unauthorized({}, '登录已过期')
         return view_func(*args, **kwargs)
 
     return verify_token
@@ -35,7 +35,7 @@ def gen_token(params):
     # 过期时间为 60s * 60m * 24h * 30d
     # .decode("ascii")必加 一下午就解决这个 bug 了 不然是 byte 类型 jsonify 方法无法转换byte类型
     # s = Serializer(current_app.config['SECRET_KEY'], 60 * 60 * 24 * 31)
-    s = Serializer(current_app.config['SECRET_KEY'], 60)
+    s = Serializer(current_app.config['SECRET_KEY'], 60 * 60 * 24)
     token = s.dumps(params).decode("ascii")
     return token
 
