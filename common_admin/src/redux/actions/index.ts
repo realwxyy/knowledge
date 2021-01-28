@@ -1,17 +1,4 @@
-import {
-  DECREMENT,
-  DECREMENT_TYPE,
-  INCREMENT,
-  INCREMENT_TYPE,
-  SET_TOKEN,
-  SET_TOKEN_TYPE,
-  SET_USER_INFO,
-  SET_USER_INFO_TYPE,
-  CLEAR_USER_INFO,
-  CLEAR_USER_INFO_TYPE,
-  CLEAR_TOKEN,
-  CLEAR_TOKEN_TYPE,
-} from '../const/const'
+import { DECREMENT, DECREMENT_TYPE, INCREMENT, INCREMENT_TYPE, SET_TOKEN, SET_TOKEN_TYPE, SET_USER_INFO, SET_USER_INFO_TYPE, CLEAR_USER_INFO, CLEAR_USER_INFO_TYPE, CLEAR_TOKEN, CLEAR_TOKEN_TYPE, TOGGLE_OPEN, TOGGLE_CLOSE, TOGGLE } from '../const/const'
 import { UserInfo } from '@/types'
 
 export interface IINCREMENTAction {
@@ -72,3 +59,9 @@ export const set_user_info = (userInfo: UserInfo): UserInfoAction => ({
 export const clear_user_info = (): UserInfoAction => ({
   type: CLEAR_USER_INFO,
 })
+
+export const collapsed_open = () => ({ type: TOGGLE_OPEN })
+
+export const collapsed_close = () => ({ type: TOGGLE_CLOSE })
+
+export const collapsed = (collapsed: boolean) => ({ type: TOGGLE, collapsed })

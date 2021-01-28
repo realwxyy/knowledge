@@ -22,3 +22,8 @@ export type SET_USER_INFO_TYPE = typeof SET_USER_INFO
 
 export const CLEAR_USER_INFO = 'CLEAR_USER_INFO'
 export type CLEAR_USER_INFO_TYPE = typeof CLEAR_USER_INFO
+
+// 定义 toggle 类型常量 use: sideBar 收缩功能
+export const TOGGLE = 'TOGGLE'
+export const TOGGLE_OPEN = 'TOGGLE_OPEN'
+export const TOGGLE_CLOSE = 'TOGGLE_CLOSE'

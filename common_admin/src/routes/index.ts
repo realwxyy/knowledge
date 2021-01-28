@@ -73,7 +73,6 @@ export const getRoute = (routes: any, list: any) => {
     if (item.children) {
       getRoute(item.children, list)
     } else {
-      document.title = item.title
       list.push(item)
     }
   }

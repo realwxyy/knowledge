@@ -21,13 +21,25 @@ const router: Array<object> = [
         key: '/brand',
         icon: PieChartOutlined,
         title: '品牌',
-        component: 'Brand',
+        children: [
+          {
+            key: '/brand',
+            title: '品牌列表',
+            component: 'Brand',
+          },
+          {
+            key: '/editBrand/:id?',
+            title: '编辑品牌',
+            component: 'EditBrand',
+            hideInMenu: true,
+          },
+        ],
       },
       {
         key: '/product',
         icon: BarChartOutlined,
         title: '商品',
-        component: 'ProductList'
+        component: 'ProductList',
       },
       {
         key: '/500',

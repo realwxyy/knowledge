@@ -7,7 +7,7 @@ const ContentCustom = () => {
   const history = useHistory()
   let { pathname } = history.location
   const routers = getAllRoute()
-  let title = routers.filter((o: any) => pathname.includes(o.path))[0].title || '未定义'
+  let title = routers.filter((o: any) => o.path.includes(pathname))[0].title || '未定义'
   useEffect(() => {
     document.title = title
   })

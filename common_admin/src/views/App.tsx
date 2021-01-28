@@ -7,7 +7,7 @@ const App = () => (
   <Switch>
     <Route exact path="/" render={() => <Redirect to="/admin/home" push />} />
     <Route path="/admin" component={AdminLayout} />
-    <Route path="/login" component={Login} exact />
+    <Route exact path="/login" component={Login} />
   </Switch>
 )
 

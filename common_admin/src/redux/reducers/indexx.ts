@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { ModifyAction } from '../actions'
-import { DECREMENT, INCREMENT, SET_TOKEN, CLEAR_TOKEN } from '../const/const'
+import { DECREMENT, INCREMENT, SET_TOKEN, CLEAR_TOKEN, TOGGLE_OPEN, TOGGLE_CLOSE, TOGGLE } from '../const/const'
 
 // 处理并返回 state 测试
 const Test = (state = 0, action: ModifyAction): number => {
@@ -32,12 +32,27 @@ const token = (state = '', action: any) => {
 }
 
 // admin-user
-const userInfo = (state = {}, action: any) => {}
+// const userInfo = (state = {}, action: any) => {}
+
+// collapse
+const collapsed = (state = false, action: any) => {
+  switch (action.type) {
+    case TOGGLE_OPEN:
+      return !state
+    case TOGGLE_CLOSE:
+      return state
+    case TOGGLE:
+      return action.collapsed
+    default:
+      return state
+  }
+}
 
 const rootReducer: any = combineReducers({
   Test,
   Test2,
   token,
+  collapsed,
 })
 
 export default rootReducer

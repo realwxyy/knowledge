@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { message } from 'antd'
+import { message, Modal } from 'antd'
 import { requestConfig } from '@config/path'
+import { clear_token } from '@redux/actions'
 import store from '@redux/store'
 
 let logoutCount = 0
@@ -21,7 +22,7 @@ service.interceptors.request.use(
     // Add X-Access-Token header to every request, you can add other custom headers here
     let storage: any = store.getState()
     if (storage.token) {
-    config.headers['common-token'] = storage.token
+      config.headers['common-token'] = storage.token
     }
     return config
   },
@@ -36,8 +37,6 @@ service.interceptors.response.use(
     const res = response.data
     if (res.code !== 0) {
       if (res.code === 1) {
-        console.log('进来了')
-        console.log(res)
         message.error({
           content: res.message || 'Error',
           duration: 5,
@@ -55,7 +54,6 @@ service.interceptors.response.use(
     }
   },
   (error: any) => {
-    console.log(error)
     let errorInfo = error.response
     let msg
     if (!errorInfo) {
@@ -72,21 +70,25 @@ service.interceptors.response.use(
     } else {
       if (error.response.data.code === -1) {
         if (logoutCount === 0) {
-          // Modal.confirm({
-          //   content: '你已被登出，可以取消继续留在该页面，或者重新登录, 确定登出?',
-          //   confirmButtonText: '重新登录',
-          //   cancelButtonText: '取消',
-          //   onOk: () => {
-          //     logoutCount = 0
-          //     localStorage.clear()
-          //     sessionStorage.clear()
-          //     // UserModule.ResetToken()
-          //     window.location.reload()
-          //     msg = error.response.data.msg
-          //   }
-          // })
-          // logoutCount++
-          return
+          Modal.confirm({
+            content: '你已被登出，可以取消继续留在该页面，或者重新登录, 确定登出?',
+            okText: '重新登录',
+            cancelText: '取消',
+            onOk: () => {
+              logoutCount = 0
+              localStorage.clear()
+              sessionStorage.clear()
+              store.dispatch(clear_token())
+              // window.location.reload()
+              const { host, protocol } = window.location
+              let url = protocol + '//' + host + '/#/login'
+              console.log(url)
+              window.location.replace(url)
+              msg = error.response.data.message
+            },
+          })
+          logoutCount++
+          return Promise.reject(msg)
         }
       } else if (errorInfo.data.code === 1 || errorInfo.data.code === 2) {
         msg = errorInfo.data.message

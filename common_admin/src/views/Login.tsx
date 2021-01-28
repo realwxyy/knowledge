@@ -1,7 +1,7 @@
 import React, { FC, ChangeEvent, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { Row, Col, Input, Button } from 'antd'
+import { Row, Col, Input, Button, message } from 'antd'
 import { login } from '@api/login'
 import { set_token, set_user_info } from '@redux/actions'
 import '@less/Login.less'
@@ -52,13 +52,17 @@ const Login: FC = () => {
    */
   const submitLogin = () => {
     let param = { name, password }
-    login(param).then((res: any) => {
-      console.log(res)
-      if (res.code === 0) {
-        dispatch(set_token(res.data.token))
-        dispatch(set_user_info(res.data))
-      }
-    })
+    if (name && password) {
+      login(param).then((res: any) => {
+        console.log(res)
+        if (res.code === 0) {
+          dispatch(set_token(res.data.token))
+          dispatch(set_user_info(res.data))
+        }
+      })
+    } else {
+      message.warning('请输入用户名和密码')
+    }
   }
 
   /**
@@ -76,42 +80,15 @@ const Login: FC = () => {
           <div className="login-container">
             <div className="login-text-container">登录</div>
             <div className="login-input-container">
-              <div
-                className={
-                  nameErr
-                    ? 'login-name-container name-error'
-                    : 'login-name-container'
-                }
-              >
-                <Input
-                  className="login-input name-error"
-                  bordered={false}
-                  placeholder={!nameErr ? '用户名' : nameErrWord}
-                  onChange={validateName}
-                />
+              <div className={nameErr ? 'login-name-container name-error' : 'login-name-container'}>
+                <Input className="login-input name-error" bordered={false} placeholder={!nameErr ? '用户名' : nameErrWord} onChange={validateName} />
               </div>
-              <div
-                className={
-                  passwordErr
-                    ? 'login-password-container name-error'
-                    : 'login-password-container'
-                }
-              >
-                <Input.Password
-                  className="login-input"
-                  bordered={false}
-                  placeholder={!passwordErr ? '密码' : passwordErrWord}
-                  onChange={validatePassword}
-                />
+              <div className={passwordErr ? 'login-password-container name-error' : 'login-password-container'}>
+                <Input.Password className="login-input" bordered={false} placeholder={!passwordErr ? '密码' : passwordErrWord} onChange={validatePassword} />
               </div>
             </div>
             <div className="login-button-area">
-              <Button
-                className="login-button"
-                type="primary"
-                size="large"
-                onClick={submitLogin}
-              >
+              <Button className="login-button" type="primary" size="large" onClick={submitLogin}>
                 登录
               </Button>
             </div>
