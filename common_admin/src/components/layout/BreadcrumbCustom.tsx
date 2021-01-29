@@ -12,10 +12,10 @@ const breadcrumbNameMap: any = {
   '/admin/brand/editBrand': '编辑品牌',
 }
 
-const BreadcrumbCustom = withRouter((props) => {
+const BreadcrumbCustom = (props: any) => {
   const { location } = props
-  let pathSnippets = location.pathname.split('/').filter((i) => i)
-  const extraBreadcrumbItems = pathSnippets.map((_, index) => {
+  let pathSnippets = location.pathname.split('/').filter((i: any) => i)
+  const extraBreadcrumbItems = pathSnippets.map((_: any, index: number) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`
     return (
       <Breadcrumb.Item key={url}>
@@ -39,5 +39,5 @@ const BreadcrumbCustom = withRouter((props) => {
       <Breadcrumb style={{ margin: '16px 0 0' }}>{breadcrumbItems}</Breadcrumb>
     </div>
   )
-})
-export default BreadcrumbCustom
+}
+export default withRouter(BreadcrumbCustom)
