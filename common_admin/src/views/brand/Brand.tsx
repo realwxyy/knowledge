@@ -1,10 +1,9 @@
 import React, { FC, useState, useEffect, useCallback } from 'react'
-import { Button, Row, Col, Input, Table, Pagination } from 'antd'
+import { Button, Row, Col, Input, Table, Pagination, Space, Popconfirm, message } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { Brand as T_Brand } from '@/types'
-import { queryBrandList } from '@api/brand'
+import { queryBrandList, delBrand } from '@api/brand'
 import { useWindowSize } from '@utils/utils'
-import { BrandListColumns } from '@/constant/column'
 import '@less/Brand.less'
 
 const Brand: FC = () => {
@@ -18,6 +17,76 @@ const Brand: FC = () => {
   const [brandName, setBrandName] = useState<string>()
   const [brandList, setBrandList] = useState<T_Brand[]>([])
   const [brandListLoading, setBrandListLoading] = useState<boolean>(false)
+
+  const BrandListColumns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width: 80,
+      align: 'center' as 'center',
+      className: 'column_ID',
+    },
+    {
+      title: '名称',
+      key: 'name',
+      width: 200,
+      align: 'center' as 'center',
+      className: 'column_name',
+      render: (t: any, r: any, i: number) => <div>{r.en_name + '/' + r.zh_name}</div>,
+    },
+    {
+      title: 'code',
+      dataIndex: 'code',
+      key: 'code',
+      width: 140,
+      align: 'center' as 'center',
+      className: 'column_code',
+    },
+    {
+      title: '地区',
+      dataIndex: 'region',
+      key: 'region',
+      width: 100,
+      align: 'center' as 'center',
+      className: 'column_region',
+    },
+    {
+      title: '关于品牌',
+      dataIndex: 'about_brand',
+      key: 'about_brand',
+      width: 240,
+      align: 'center' as 'center',
+      className: 'column_about_brand',
+      render: (t: any) => <div className="about_brand">{t}</div>,
+    },
+    {
+      title: '序号',
+      dataIndex: 'serial_number',
+      key: 'serial_number',
+      width: 80,
+      align: 'center' as 'center',
+      className: 'column_serial_number',
+    },
+    {
+      title: '操作',
+      key: 'operate',
+      width: 100,
+      align: 'center' as 'center',
+      render: (item: any) => (
+        <Space>
+          <Button size="small" type="primary" onClick={() => editBrand(item)}>
+            编辑
+          </Button>
+          <Popconfirm title="确认删除该品牌?" onConfirm={() => deleteBrand(item)} okText="是" cancelText="否">
+            <Button size="small" type="primary" danger>
+              删除
+            </Button>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ]
 
   const getBrandList = useCallback(() => {
     setBrandListLoading(true)
@@ -33,8 +102,18 @@ const Brand: FC = () => {
     })
   }, [page, size, brandName])
 
-  const addBrand = () => {
-    history.push('/admin/brand/editBrand')
+  const addBrand = () => history.push('/admin/brand/editBrand')
+
+  const editBrand = (item: any) => history.push(`/admin/brand/editBrand/${item.id}`)
+
+  const deleteBrand = (item: any) => {
+    const { id } = item
+    delBrand({ id }).then((res: any) => {
+      if (res.code === 0) {
+        message.success('删除成功')
+        getBrandList()
+      }
+    })
   }
 
   useEffect(() => {
