@@ -10,6 +10,7 @@ from src.model.dto.quotation_product import QuotationProduct, QuotationProductSc
 from src.model.dto.wechat_user import WechatUser, WechatUserSchema
 from src.model.dto.quotation_tag import QuotationTag, QuotationTagSchema
 from src.model.dto.admin_user import AdminUser, AdminUserSchema
+from src.model.dto.brand_tag import BrandTag, BrandTagSchema
 
 # popo
 from src.model.popo.code2session import Code2Session

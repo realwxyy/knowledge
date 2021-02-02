@@ -3,19 +3,19 @@ from marshmallow_sqlalchemy import ModelSchema
 from marshmallow import fields
 
 
-class Tag(db.Model):
+class BrandTag(db.Model):
     # 定义表名
-    __tablename__ = 'tag'
+    __tablename__ = 'brand_tag'
     # 定义字段
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    name = db.Column(db.String(64))
-    color = db.Column(db.String(10))
-    create_date = db.Column(db.DateTime(10))
-    update_date = db.Column(db.DateTime(10))
+    brand_id = db.Column(db.Integer())
+    tag_id = db.Column(db.Integer())
+    create_date = db.Column(db.DateTime())
+    update_date = db.Column(db.DateTime())
     is_delete = db.Column(db.Integer())
 
     def get_schema(self):
-        return {'id': self.id, 'name': self.name, 'color': self.color, 'create_date': self.create_date, 'update_date': self.update_date, 'is_delete': self.is_delete}
+        return {'id': self.id, 'tag_id': self.tag_id, 'brand_id': self.brand_id, 'create_date': self.create_date, 'update_date': self.update_date, 'is_delete': self.is_delete}
 
     def save(self):
         db.session.add(self)
@@ -23,14 +23,14 @@ class Tag(db.Model):
         return self
 
 
-class TagSchema(ModelSchema):
+class BrandTagSchema(ModelSchema):
     class Meta:
-        model = Tag
+        model = BrandTag
         # sqla_session = db.session
 
     id = fields.Number()
-    name = fields.String()
-    color = fields.String()
+    tag_id = fields.Number()
+    brand_id = fields.Number()
     create_date = fields.DateTime()
     update_date = fields.DateTime()
     is_delete = fields.Number()

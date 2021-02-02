@@ -16,6 +16,7 @@ def query_tag_by_id(id):
     tag = Tag.query.get(id)
     return tag_schema.dump(tag)
 
+
 def query_tags_by_quotation_id(id):
     tag_schema = TagSchema()
     tag = Tag.query.filter(Tag.id == id)
@@ -41,6 +42,6 @@ def delete_tag(params):
 
 
 def query_tags():
-    tag_schema = TagSchema(many=True, only=['id', 'name'])
+    tag_schema = TagSchema(many=True, only=['id', 'name', 'color'])
     tag = Tag.query.filter(Tag.is_delete >= 0).all()
     return tag_schema.dump(tag)

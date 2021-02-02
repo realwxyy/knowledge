@@ -5,13 +5,19 @@ from src.service import tag_service
 gl_tag = Blueprint('tag', __name__, url_prefix='/tag')
 
 
+@gl_tag.route('all_tag', methods=['get'])
+def all_tag_list():
+    tags = tag_service.query_tags()
+    return resp.resp_succ(tags, '查询成功')
+
+
 @gl_tag.route('tag', methods=['post'])
 def tag_post():
     params = utils.get_params(request)
     validate_resp = utils.validate_dict_not_empty_with_key(params, ['name'])
     if validate_resp.get('code') == 0:
         tag_resp = tag_service.query_tag_by_name(params.get('name'))
-        if tag_resp.get(id):
+        if tag_resp.get('id'):
             return resp.resp_fail({}, '请勿重复添加标签：' + tag_resp.get('name'))
         else:
             params = utils.assign_post_fields(params)

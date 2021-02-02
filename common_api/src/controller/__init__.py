@@ -8,6 +8,7 @@ from src.controller.product.product_controller import gl_product
 from src.controller.quotation_controller import gl_quotation
 from src.controller.admin_user_controller import gl_admin_user
 from src.controller.login_controller import gl_login
+from src.controller.upload_controller import gl_upload
 
 
 def resgister_all_bluePrint(app):
@@ -21,3 +22,4 @@ def resgister_all_bluePrint(app):
     app.register_blueprint(gl_quotation)
     app.register_blueprint(gl_admin_user)
     app.register_blueprint(gl_login)
+    app.register_blueprint(gl_upload)
