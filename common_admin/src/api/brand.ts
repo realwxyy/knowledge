@@ -6,11 +6,17 @@ export const queryBrandList = (data: any) =>
     method: 'get',
     params: data,
   })
+export const addBrand = (data: any) =>
+  request({
+    url: `brand/brand`,
+    method: 'post',
+    data,
+  })
 
 export const saveBrand = (data: any) =>
   request({
     url: `brand/brand`,
-    method: 'post',
+    method: 'put',
     data,
   })
 

@@ -1,9 +1,10 @@
 import React, { FC, useState, useEffect, useRef, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { Spin, Form, Input, Upload, Button, Affix, Tag, Modal, Table, Tooltip } from 'antd'
 import { LoadingOutlined, CameraFilled, QuestionCircleOutlined } from '@ant-design/icons'
-import { oss, ossUrl } from '@config/path'
-import { saveBrand, queryBrandDetail } from '@api/brand'
+import { uploadUrl, staticUrl } from '@config/path'
+import { addBrand, saveBrand, queryBrandDetail } from '@api/brand'
+import { queryAllTags } from '@api/tag'
 import '@less/EditBrand.less'
 // import { DraggableArea } from 'react-draggable-tags'
 const { DraggableArea } = require('react-draggable-tags')
@@ -13,34 +14,11 @@ const layout = {
   wrapperCol: { span: 16, xs: 6, sm: 18, md: 18, lg: 16, xl: 10, xxl: 8 },
 }
 
-let data = [
-  { key: 1, id: 1, content: '紧致轮廓', color: '#006699' },
-  { key: 2, id: 2, content: '淡化细纹', color: '#0099CC' },
-  { key: 3, id: 3, content: '敏感肌肤适用', color: '#00CCCC' },
-  { key: 4, id: 4, content: '减轻异味和瘙痒', color: '#339966' },
-  { key: 5, id: 5, content: '瑞士原装进口', color: '#33FFFF' },
-  { key: 6, id: 6, content: '德国专业抗衰', color: '#6633CC' },
-  { key: 7, id: 7, content: '欧洲植物精油领导品牌', color: '#6699FF' },
-  { key: 8, id: 8, content: '全球十大精油品牌', color: '#6699CC' },
-  { key: 9, id: 9, content: '德国殿堂级抗衰品牌', color: '#996699' },
-  { key: 10, id: 10, content: '德国美容SPA集团排名前三klapp集团旗下', color: '#99CCCC' },
-  { key: 11, id: 11, content: '高端护肤', color: '#CC0066' },
-  { key: 12, id: 12, content: '关注热销品、喜欢有网红推荐的客户', color: '#CC66FF' },
-  { key: 13, id: 13, content: '性价比高', color: '#CC9999' },
-  { key: 14, id: 14, content: '毛利率高', color: '#CCFF33' },
-  { key: 15, id: 15, content: '瑞士小众高端香水', color: '#FF3366' },
-  { key: 16, id: 16, content: '香水与艺术的完美融合', color: '#990099' },
-  { key: 17, id: 17, content: '法国曼氏集团专业调香师调配', color: '#330000' },
-  { key: 18, id: 18, content: 'cherry', color: '#FF6600' },
-  { key: 19, id: 19, content: 'peach', color: '#FFCCCC' },
-]
-
-let checkData: any = []
-
 const validateMessages = {}
 
 const EditBrand: FC = () => {
   const { id } = useParams() as any
+  const history = useHistory()
   const [form] = Form.useForm()
   const formRef: any = useRef()
   const [loading, setLoading] = useState<boolean>(true)
@@ -50,10 +28,13 @@ const EditBrand: FC = () => {
   const [brandStoryLoading, setBrandStoryLoading] = useState<boolean>(false)
   const [promotionalImageList, setPromotionalImageList] = useState<any[]>([])
   const [promotionalImageLoading, setPromotionalImageLoading] = useState<boolean>(false)
-  const [tagList, setTagList] = useState<any>(data)
+  const [tagList, setTagList] = useState<any>([])
   const [checkedTagList, setCheckedTagList] = useState<any>([])
   const [tagListLoading, setTagListLoading] = useState<boolean>(false)
   const [editTagDialog, setEditTagDialog] = useState<boolean>(false)
+  const [previewVisible, setPreviewVisible] = useState<boolean>(false)
+  const [previewTitle, setPreviewTitle] = useState<string>('')
+  const [previewImage, setPreviewImage] = useState<string>('')
   // { uid: -1, url: ossUrl + 'brandLogo/fioSz0SX.jpeg', fileName: 'brandLogo/fioSz0SX.jpeg' }
   const BrandTagListColumns = [
     {
@@ -61,7 +42,7 @@ const EditBrand: FC = () => {
       key: 'name',
       width: 260,
       align: 'center' as 'center',
-      render: (t: any) => <Tag color={t.color}>{t.content}</Tag>,
+      render: (t: any) => <Tag color={t.color}>{t.name}</Tag>,
     },
     {
       title: '操作',
@@ -95,16 +76,22 @@ const EditBrand: FC = () => {
   )
 
   const onFinish = (values: any) => {
-    let { brandForm } = values
     let tags = checkedTagList.map((o: any) => o.id)
     let logo = logoList[0].fileName
     let story = brandStoryList[0].fileName
     let promotional_img = promotionalImageList[0].fileName
-    let param = Object.assign({}, brandForm, { tags, logo, story, promotional_img })
-    console.log(param)
-    saveBrand(param).then((res: any) => {
-      console.log(res)
-    })
+    let param = Object.assign({}, values, { tags, logo, story, promotional_img })
+    if (id) {
+      param = Object.assign({}, param, { id })
+      saveBrand(param).then((res: any) => {
+        console.log(res)
+      })
+    } else {
+      addBrand(param).then((res: any) => {
+        console.log(res)
+      })
+    }
+    history.goBack()
   }
 
   const logoOnChange = (info: any) => {
@@ -114,7 +101,7 @@ const EditBrand: FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      setLogoList([{ uid: logoList.length + 1, url: ossUrl + info.file.response.data, fileName: info.file.response.data }])
+      setLogoList([{ uid: logoList.length + 1, url: staticUrl + info.file.response.data, fileName: info.file.response.data }])
     }
   }
 
@@ -125,7 +112,7 @@ const EditBrand: FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      setBrandStoryList([{ uid: brandStoryList.length + 1, url: ossUrl + info.file.response.data, fileName: info.file.response.data }])
+      setBrandStoryList([{ uid: brandStoryList.length + 1, url: staticUrl + info.file.response.data, fileName: info.file.response.data }])
     }
   }
 
@@ -136,7 +123,7 @@ const EditBrand: FC = () => {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      setPromotionalImageList([{ uid: promotionalImageList.length + 1, url: ossUrl + info.file.response.data, fileName: info.file.response.data }])
+      setPromotionalImageList([{ uid: promotionalImageList.length + 1, url: staticUrl + info.file.response.data, fileName: info.file.response.data }])
     }
   }
 
@@ -144,13 +131,9 @@ const EditBrand: FC = () => {
     setCheckedTagList(tags)
   }
   //渲染每项
-  const itemRender = ({ tag, index }: any) => {
+  const itemRender = ({ tag }: any) => {
     // return <div className="tag">{tag.content}</div>
-    return (
-      <Tag color={tag.color} closable onClose={(e) => tagOnClose(e, tag)}>
-        {tag.name}
-      </Tag>
-    )
+    return <Tag color={tag.color}>{tag.name}</Tag>
   }
 
   // 渲染每项
@@ -166,9 +149,10 @@ const EditBrand: FC = () => {
     e.preventDefault()
     Modal.confirm({
       title: `删除确认`,
-      content: `确认删除标签 [ ${tag.content} ] ?`,
+      content: `确认删除标签 [ ${tag.name} ] ?`,
       onOk: () => {
-        setTagList(tagList.filter((o: any) => o.id !== tag.id))
+        let ctl = checkedTagList.filter((o: any) => o.id !== tag.id)
+        setCheckedTagList(ctl)
       },
     })
   }
@@ -182,15 +166,19 @@ const EditBrand: FC = () => {
     let tl: any = tagList
     ctl.push(item)
     setCheckedTagList(ctl)
-    setTagList(tl.filter((o: any) => !checkData.map((p: any) => p.id).includes(o.id)))
+    setTagList(tl.filter((o: any) => !ctl.map((p: any) => p.id).includes(o.id)))
   }
 
   const getBrandDetail = useCallback(
     (id: number) => {
       queryBrandDetail({ id }).then((res: any) => {
         if (res.code === 0) {
-          form.setFieldsValue(res.data)
-          setCheckedTagList(res.data.tags)
+          let data = res.data
+          form.setFieldsValue(data)
+          setCheckedTagList(data.tags)
+          setLogoList([{ uid: 0, url: staticUrl + data.logo, fileName: data.logo }])
+          setBrandStoryList([{ uid: 0, url: staticUrl + data.story, fileName: data.story }])
+          setPromotionalImageList([{ uid: 0, url: staticUrl + data.promotional_img, fileName: data.promotional_img }])
         }
         setLoading(false)
       })
@@ -198,12 +186,35 @@ const EditBrand: FC = () => {
     [form]
   )
 
+  const getAllTags = () => {
+    setTagListLoading(true)
+    queryAllTags().then((res: any) => {
+      if (res.code === 0) {
+        let { data } = res
+        data.forEach((o: any) => (o.key = o.id))
+        setTagList(res.data)
+      }
+      setTagListLoading(false)
+    })
+  }
+
+  const handleCancel = () => setPreviewVisible(false)
+
+  const imagePreview = (file: any) => {
+    console.log(file)
+    let nameArr = file.fileName.split('/')
+    setPreviewTitle(nameArr[nameArr.length - 1])
+    setPreviewImage(file.url)
+    setPreviewVisible(true)
+  }
+
   useEffect(() => {
     if (id) {
       getBrandDetail(id)
     } else {
       setLoading(false)
     }
+    getAllTags()
   }, [id, getBrandDetail])
 
   return (
@@ -241,7 +252,7 @@ const EditBrand: FC = () => {
                 </span>
               }
             >
-              <Upload listType="picture-card" className="logo-uploader" action={oss} fileList={logoList} onChange={logoOnChange} maxCount={1}>
+              <Upload listType="picture-card" className="logo-uploader" action={uploadUrl + 'brandLogo'} fileList={logoList} onChange={logoOnChange} maxCount={1} onPreview={imagePreview} onRemove={() => setLogoList([])}>
                 {logoList.length >= 1 ? null : logoUploadButton}
               </Upload>
             </Form.Item>
@@ -255,7 +266,7 @@ const EditBrand: FC = () => {
                 </span>
               }
             >
-              <Upload listType="picture-card" className="brand-story-uploader" action={oss} fileList={brandStoryList} onChange={brandStoryOnChage} maxCount={1}>
+              <Upload listType="picture-card" className="brand-story-uploader" action={uploadUrl + 'brandStory'} fileList={brandStoryList} onChange={brandStoryOnChage} maxCount={1} onPreview={imagePreview} onRemove={() => setBrandStoryList([])}>
                 {brandStoryList.length >= 1 ? null : brandStoryUploadButton}
               </Upload>
             </Form.Item>
@@ -269,7 +280,7 @@ const EditBrand: FC = () => {
                 </span>
               }
             >
-              <Upload listType="picture-card" className="promotional-img-uploader" action={oss} fileList={promotionalImageList} onChange={promotionImageOnChage} maxCount={1}>
+              <Upload listType="picture-card" className="promotional-img-uploader" action={uploadUrl + 'brandPromotional'} fileList={promotionalImageList} onChange={promotionImageOnChage} maxCount={1} onPreview={imagePreview} onRemove={() => setPromotionalImageList([])}>
                 {promotionalImageList.length >= 1 ? null : promotionalImageUploadButton}
               </Upload>
             </Form.Item>
@@ -299,7 +310,18 @@ const EditBrand: FC = () => {
           </Form>
         </Spin>
       </div>
-      <Modal title="编辑特色" width="900px" maskClosable={false} visible={editTagDialog} onCancel={() => setEditTagDialog(false)}>
+      <Modal
+        title="编辑特色"
+        width="900px"
+        maskClosable={false}
+        visible={editTagDialog}
+        onCancel={() => setEditTagDialog(false)}
+        footer={
+          <Button type="primary" onClick={() => setEditTagDialog(false)}>
+            关闭
+          </Button>
+        }
+      >
         <div className="edit-tag-container">
           <div className="left-tag-container">
             <div className="top-tip">{checkedTagList.length > 1 ? '（拖拽可排序）' : ''}</div>
@@ -313,10 +335,13 @@ const EditBrand: FC = () => {
               <Input className="default-input" placeholder="输入标签内容以搜索" />
               <Button type="primary">搜索</Button>
             </div>
-            <Table loading={tagListLoading} style={{ minHeight: 430, maxHeight: 430 }} scroll={{ y: 430 }} dataSource={tagList} columns={BrandTagListColumns} pagination={false} />
+            <Table loading={tagListLoading} style={{ minHeight: 430, maxHeight: 430 }} scroll={{ y: 430 }} dataSource={tagList.filter((o: any) => !checkedTagList.map((p: any) => p.id).includes(o.id))} columns={BrandTagListColumns} pagination={false} />
             {/* <DraggableArea tags={tagList} render={itemRender} onChange={onChange} /> */}
           </div>
         </div>
+      </Modal>
+      <Modal visible={previewVisible} title={previewTitle} footer={null} onCancel={handleCancel} width="1100px">
+        <img alt="example" style={{ width: '100%' }} src={previewImage} />
       </Modal>
     </>
   )
